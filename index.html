@@ -26,7 +26,7 @@
         }
         @media print {
             @page {
-                size: A4;
+                size: F4;
                 margin: 2cm;
             }
             .no-print { display: none !important; }
@@ -143,8 +143,8 @@
                         <div>
                             <label class="block text-slate-600 mb-1">Sertakan Bahasa Arab</label>
                             <select id="sertakanArab" class="w-full rounded border-slate-300 border p-1.5 focus:ring-1 focus:ring-indigo-500">
-                                <option value="tidak">Tidak</option>
-                                <option value="ya">Ya (Contoh / PAI)</option>
+                                <option value="tidak">Tidak (Umum)</option>
+                                <option value="ya">Ya (PAI/Bahasa Arab)</option>
                             </select>
                         </div>
                     </div>
@@ -165,7 +165,7 @@
                         </label>
                         <span class="text-[10px] bg-slate-200 text-slate-700 px-1.5 py-0.5 rounded font-semibold">Opsional</span>
                     </div>
-                    <p class="text-[11px] text-slate-600">Unggah file acuan teks (.txt, .md, .csv, .json, .doc, .pdf) untuk bahan referensi AI.</p>
+                    <p class="text-[11px] text-slate-600">Unggah file acuan teks (.doc atau .pdf) untuk bahan referensi AI.</p>
                     
                     <div class="relative">
                         <input type="file" id="fileReferensi" onchange="handleFileUpload(event)" accept=".txt,.md,.csv,.json,.doc,.docx,.pdf" class="hidden">
@@ -265,7 +265,7 @@
                 
                 <!-- KOP SURAT / HEADER -->
                 <div class="border-b-4 border-double border-black pb-3 mb-4 text-center">
-                    <h2 class="font-bold text-base md:text-lg uppercase tracking-wide" id="docNamaSekolah">SD NEGERI 1 SUKAMAJU</h2>
+                    <h2 class="font-bold text-base md:text-lg uppercase tracking-wide" id="docNamaSekolah">SD-IT Abu Bakar Ash-Shiddiq</h2>
                     <h3 class="font-bold text-sm md:text-base uppercase" id="docJudulUjian">SUMATIF AKHIR SEMESTER (SAS) GANJIL</h3>
                     <p class="text-xs italic">Tahun Ajaran <span id="docTA">2025/2026</span></p>
                 </div>
@@ -872,7 +872,7 @@ Jumlah Soal yang Wajib Dibuat:
 
         // Helper untuk memastikan format prefiks A., B., C., D. selalu konsisten
         function formatOptionText(text, index) {
-            const letters = ['A', 'B', 'C', 'D'];
+            const letters = ['A', 'C', 'B', 'D'];
             const letter = letters[index] || 'A';
             if (!text) return `${letter}. `;
             const cleanText = text.trim();
