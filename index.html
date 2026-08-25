@@ -1,0 +1,1373 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generator Soal & Instrumen Penilaian SD/MI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Times+New+Roman&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+        }
+        .exam-document {
+            font-family: 'Times New Roman', Times, serif !important;
+            font-size: 12pt;
+            line-height: 1.5;
+            color: #000000;
+        }
+        .arabic-text {
+            font-family: 'Amiri', 'Traditional Arabic', 'Times New Roman', serif !important;
+            font-size: 14pt !important;
+            direction: rtl;
+            unicode-bidi: embed;
+            line-height: 1.8;
+        }
+        @media print {
+            @page {
+                size: A4;
+                margin: 2cm;
+            }
+            .no-print { display: none !important; }
+            .print-only { display: block !important; }
+            body { background: white !important; padding: 0 !important; margin: 0 !important; }
+            .exam-page { box-shadow: none !important; margin: 0 !important; width: 100% !important; padding: 0 !important; }
+            .page-break-before { page-break-before: always !important; }
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background-color: #cbd5e1;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body class="bg-slate-100 min-h-screen text-slate-800 flex flex-col">
+
+    <!-- HEADER NAVBAR -->
+    <header class="bg-indigo-900 text-white shadow-md sticky top-0 z-50 no-print">
+        <div class="max-w-7xl mx-auto px-4 py-3 flex flex-wrap justify-between items-center gap-3">
+            <div class="flex items-center space-x-3">
+                <div class="bg-amber-400 text-indigo-950 p-2 rounded-lg font-bold text-xl">
+                    <i class="fa-solid fa-file-pen"></i>
+                </div>
+                <div>
+                    <h1 class="font-bold text-lg leading-tight">Generator Soal & Assessment SD/MI</h1>
+                    <p class="text-xs text-indigo-200">Standar STS, SAS, SAT & Ujian Praktik (Sesuai Ketentuan HOTS/Literasi)</p>
+                </div>
+            </div>
+            <div class="flex items-center space-x-2">
+                <button onclick="setActiveTab('form')" id="tabBtnForm" class="px-3 py-1.5 rounded-md text-sm font-medium bg-indigo-700 text-white hover:bg-indigo-600 transition">
+                    <i class="fa-solid fa-sliders mr-1.5"></i>Pengaturan Soal
+                </button>
+                <button onclick="setActiveTab('preview')" id="tabBtnPreview" class="px-3 py-1.5 rounded-md text-sm font-medium bg-indigo-950 text-indigo-200 hover:bg-indigo-800 transition">
+                    <i class="fa-solid fa-eye mr-1.5"></i>Preview & Edit
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-grow max-w-7xl w-full mx-auto p-4 md:p-6 grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+        <!-- LEFT PANEL: CONFIGURATION FORM (4 Cols on LG) -->
+        <aside id="formContainer" class="lg:col-span-4 bg-white rounded-xl shadow-sm border border-slate-200 p-5 space-y-5 no-print overflow-y-auto max-h-[calc(100vh-100px)] custom-scrollbar">
+            
+            <div class="border-b border-slate-100 pb-3 flex justify-between items-center">
+                <h2 class="font-bold text-slate-800 flex items-center text-base">
+                    <i class="fa-solid fa-gears text-indigo-600 mr-2"></i> Parameter Penyusunan
+                </h2>
+                <span class="text-xs bg-indigo-50 text-indigo-700 font-semibold px-2 py-0.5 rounded-full border border-indigo-200">Kurikulum Merdeka</span>
+            </div>
+
+            <!-- Form Controls -->
+            <form id="generatorForm" onsubmit="handleGenerate(event)" class="space-y-4">
+                
+                <!-- Ujian & Kelas Setup -->
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 mb-1">Jenis Evaluasi</label>
+                        <select id="jenisUjian" onchange="updateRuleNotice()" class="w-full text-xs rounded-lg border-slate-300 border p-2 focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                            <option value="STS">STS (Sumatif Tengah Sem.)</option>
+                            <option value="SAS">SAS (Sumatif Akhir Sem.)</option>
+                            <option value="SAT">SAT (Sumatif Akhir Tahun)</option>
+                            <option value="PRAKTIK">Ujian Praktik / Kinerja</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 mb-1">Tingkat Kelas</label>
+                        <select id="tingkatKelas" onchange="onKelasChange()" class="w-full text-xs rounded-lg border-slate-300 border p-2 focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                            <option value="1">Kelas 1 SD/MI (20 Soal)</option>
+                            <option value="2">Kelas 2 SD/MI (20 Soal)</option>
+                            <option value="3">Kelas 3 SD/MI (30 Soal)</option>
+                            <option value="4" selected>Kelas 4 SD/MI (30 Soal)</option>
+                            <option value="5">Kelas 5 SD/MI (35 Soal)</option>
+                            <option value="6">Kelas 6 SD/MI (35 Soal)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Komposisi Soal PG & Isian -->
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">Komposisi Soal PG & Isian</label>
+                    <select id="komposisiSoal" onchange="updateRuleNotice()" class="w-full text-xs rounded-lg border-slate-300 border p-2 focus:ring-2 focus:ring-indigo-500 focus:outline-none bg-amber-50/50">
+                        <!-- Populated dynamically via JS -->
+                    </select>
+                </div>
+
+                <!-- Informasi Sekolah -->
+                <div class="space-y-3 bg-slate-50 p-3 rounded-lg border border-slate-200 text-xs">
+                    <h3 class="font-bold text-slate-700 flex items-center">
+                        <i class="fa-solid fa-school text-indigo-500 mr-1.5"></i> Identitas Kop Sekolah
+                    </h3>
+                    <div>
+                        <label class="block text-slate-600 mb-1">Nama Satuan Pendidikan / Madrasah</label>
+                        <input type="text" id="namaSekolah" value="SD NEGERI 1 SUKAMAJU" class="w-full rounded border-slate-300 border p-1.5 focus:ring-1 focus:ring-indigo-500">
+                    </div>
+                    <div class="grid grid-cols-2 gap-2">
+                        <div>
+                            <label class="block text-slate-600 mb-1">Mata Pelajaran</label>
+                            <input type="text" id="mataPelajaran" value="IPAS (Ilmu Pengetahuan Alam & Sosial)" class="w-full rounded border-slate-300 border p-1.5 focus:ring-1 focus:ring-indigo-500">
+                        </div>
+                        <div>
+                            <label class="block text-slate-600 mb-1">Semester & TA</label>
+                            <input type="text" id="semesterTA" value="1 (Ganjil) / 2025/2026" class="w-full rounded border-slate-300 border p-1.5 focus:ring-1 focus:ring-indigo-500">
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2">
+                        <div>
+                            <label class="block text-slate-600 mb-1">Alokasi Waktu</label>
+                            <input type="text" id="alokasiWaktu" value="90 Menit" class="w-full rounded border-slate-300 border p-1.5 focus:ring-1 focus:ring-indigo-500">
+                        </div>
+                        <div>
+                            <label class="block text-slate-600 mb-1">Sertakan Bahasa Arab</label>
+                            <select id="sertakanArab" class="w-full rounded border-slate-300 border p-1.5 focus:ring-1 focus:ring-indigo-500">
+                                <option value="tidak">Tidak</option>
+                                <option value="ya">Ya (Contoh / PAI)</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Materi & Capaian Pembelajaran -->
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">Topik Utama / Capaian Pembelajaran (CP)</label>
+                    <textarea id="topikMateri" rows="3" class="w-full text-xs rounded-lg border-slate-300 border p-2 focus:ring-2 focus:ring-indigo-500 focus:outline-none" placeholder="Masukkan ringkasan materi, misal: Fotosintesis, Ekosistem, Wujud Benda, dan Energi kinetik..."></textarea>
+                </div>
+
+                <!-- OPTIONAL FEATURE 1: Upload File Referensi / Latihan -->
+                <div class="bg-indigo-50/60 p-3 rounded-lg border border-indigo-100 text-xs space-y-2">
+                    <div class="flex items-center justify-between">
+                        <label class="font-bold text-indigo-950 flex items-center">
+                            <i class="fa-solid fa-file-arrow-up text-indigo-600 mr-1.5"></i>
+                            Upload Referensi / Soal Latihan
+                        </label>
+                        <span class="text-[10px] bg-slate-200 text-slate-700 px-1.5 py-0.5 rounded font-semibold">Opsional</span>
+                    </div>
+                    <p class="text-[11px] text-slate-600">Unggah file acuan teks (.txt, .md, .csv, .json, .doc, .pdf) untuk bahan referensi AI.</p>
+                    
+                    <div class="relative">
+                        <input type="file" id="fileReferensi" onchange="handleFileUpload(event)" accept=".txt,.md,.csv,.json,.doc,.docx,.pdf" class="hidden">
+                        <label for="fileReferensi" class="w-full flex items-center justify-center p-2.5 bg-white border border-dashed border-indigo-300 rounded-lg cursor-pointer hover:bg-indigo-50 transition text-slate-600">
+                            <i class="fa-solid fa-cloud-arrow-up text-indigo-500 mr-2 text-base"></i>
+                            <span id="fileNameDisplay" class="truncate font-medium">Klik untuk Pilih File Referensi...</span>
+                        </label>
+                    </div>
+
+                    <!-- File preview status indicator -->
+                    <div id="fileInfoBox" class="hidden flex items-center justify-between bg-emerald-50 text-emerald-800 p-2 rounded border border-emerald-200 text-[11px]">
+                        <span id="fileInfoText" class="truncate font-medium"><i class="fa-solid fa-check-circle mr-1 text-emerald-600"></i> File dimuat</span>
+                        <button type="button" onclick="removeUploadedFile()" class="text-slate-400 hover:text-rose-600 ml-2 font-bold"><i class="fa-solid fa-xmark"></i></button>
+                    </div>
+                </div>
+
+                <!-- OPTIONAL FEATURE 2: Instruksi / Catatan Tambahan Penyesuaian -->
+                <div class="bg-slate-50 p-3 rounded-lg border border-slate-200 text-xs space-y-1.5">
+                    <div class="flex items-center justify-between">
+                        <label class="font-bold text-slate-800 flex items-center">
+                            <i class="fa-solid fa-sliders text-slate-600 mr-1.5"></i>
+                            Instruksi Tambahan AI
+                        </label>
+                        <span class="text-[10px] bg-slate-200 text-slate-700 px-1.5 py-0.5 rounded font-semibold">Opsional</span>
+                    </div>
+                    <textarea id="instruksiTambahan" rows="2" class="w-full text-xs rounded border-slate-300 border p-2 focus:ring-1 focus:ring-indigo-500" placeholder="Misal: 'Fokuskan pada soal analisis grafik', 'Buat variasi cerita daerah setempat', 'Tingkatkan tingkat kesulitan soal essay'..."></textarea>
+                </div>
+
+                <!-- Rule Dynamic Summary Box -->
+                <div id="ruleNoticeBox" class="bg-amber-50 border border-amber-200 rounded-lg p-3 text-xs text-amber-900 space-y-1">
+                    <!-- Dynamic Rule Text generated by JS -->
+                </div>
+
+                <!-- API Key optional field for custom Gemini AI -->
+                <div class="border-t border-slate-100 pt-3">
+                    <details class="text-xs group">
+                        <summary class="cursor-pointer font-semibold text-slate-600 hover:text-indigo-600 flex items-center justify-between">
+                            <span><i class="fa-solid fa-key mr-1"></i> Pengaturan AI Gemini (Opsional)</span>
+                            <i class="fa-solid fa-chevron-down group-open:rotate-180 transition-transform"></i>
+                        </summary>
+                        <div class="mt-2 space-y-2 text-slate-500">
+                            <p>Secara bawaan aplikasi menggunakan API Gemini bawaan runtime. Anda dapat memasukkan API Key sendiri jika diperlukan.</p>
+                            <input type="password" id="customApiKey" placeholder="API Key (Biarkan kosong untuk default)" class="w-full rounded border-slate-300 border p-1.5 focus:ring-1 focus:ring-indigo-500">
+                        </div>
+                    </details>
+                </div>
+
+                <div class="pt-2 space-y-2">
+                    <button type="submit" id="btnGenerateAI" class="w-full py-2.5 px-4 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-lg shadow-md transition flex items-center justify-center text-xs md:text-sm">
+                        <i class="fa-solid fa-wand-magic-sparkles mr-2 text-amber-300"></i> Buat Soal Otomatis (AI Gemini)
+                    </button>
+
+                    <button type="button" onclick="loadSampleTemplate()" class="w-full py-2 px-4 bg-slate-200 hover:bg-slate-300 text-slate-700 font-semibold rounded-lg transition flex items-center justify-center text-xs">
+                        <i class="fa-solid fa-file-invoice mr-2"></i> Muat Draf Contoh Standar
+                    </button>
+                </div>
+            </form>
+        </aside>
+
+        <!-- RIGHT PANEL: LIVE DOCUMENT PREVIEW & EDIT (8 Cols on LG) -->
+        <section id="previewContainer" class="lg:col-span-8 bg-white rounded-xl shadow-sm border border-slate-200 flex flex-col overflow-hidden">
+            
+            <!-- Toolbar Action Bar -->
+            <div class="bg-slate-50 border-b border-slate-200 p-3 flex flex-wrap items-center justify-between gap-2 no-print">
+                <div class="flex items-center space-x-2">
+                    <span class="text-xs font-bold uppercase tracking-wider text-slate-500">Tampilan Lembar Kerja</span>
+                    <span id="badgeInfo" class="text-xs bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded font-medium">Siap Di-Export</span>
+                </div>
+                
+                <div class="flex flex-wrap items-center gap-2">
+                    <!-- Export Word Button (Enhanced Formatting) -->
+                    <button onclick="exportToWord()" class="px-3.5 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-md text-xs font-semibold shadow-sm transition flex items-center">
+                        <i class="fa-solid fa-file-word mr-1.5 text-sm"></i> Download Word (.doc)
+                    </button>
+
+                    <!-- Print / Save PDF Button -->
+                    <button onclick="window.print()" class="px-3.5 py-1.5 bg-slate-700 hover:bg-slate-800 text-white rounded-md text-xs font-semibold shadow-sm transition flex items-center">
+                        <i class="fa-solid fa-print mr-1.5 text-sm"></i> Cetak / PDF
+                    </button>
+
+                    <!-- Quick Add Question -->
+                    <button onclick="addNewQuestionModal()" class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-md text-xs font-semibold shadow-sm transition flex items-center">
+                        <i class="fa-solid fa-plus mr-1"></i> Tambah Soal
+                    </button>
+                </div>
+            </div>
+
+            <!-- Loading Spinner Overlay -->
+            <div id="loadingOverlay" class="hidden flex-col items-center justify-center py-20 px-4 text-center">
+                <div class="w-12 h-12 border-4 border-indigo-200 border-t-indigo-600 rounded-full animate-spin mb-4"></div>
+                <h3 class="font-bold text-slate-800 text-lg mb-1">Sedang Menyusun Naskah Soal & Rubrik...</h3>
+                <p class="text-xs text-slate-500 max-w-md">Sistem AI sedang menyesuaikan struktur Pilihan Ganda, Isian, Essay HOTS, Literasi-Numerasi, dan instruksi tambahan yang Anda berikan.</p>
+            </div>
+
+            <!-- EXAM DOCUMENT CANVAS (Editable & Styled) -->
+            <div id="documentCanvas" class="p-6 md:p-10 overflow-y-auto max-h-[calc(100vh-140px)] custom-scrollbar exam-document bg-white">
+                
+                <!-- KOP SURAT / HEADER -->
+                <div class="border-b-4 border-double border-black pb-3 mb-4 text-center">
+                    <h2 class="font-bold text-base md:text-lg uppercase tracking-wide" id="docNamaSekolah">SD NEGERI 1 SUKAMAJU</h2>
+                    <h3 class="font-bold text-sm md:text-base uppercase" id="docJudulUjian">SUMATIF AKHIR SEMESTER (SAS) GANJIL</h3>
+                    <p class="text-xs italic">Tahun Ajaran <span id="docTA">2025/2026</span></p>
+                </div>
+
+                <!-- TABLE IDENTITAS UJIAN -->
+                <table id="tableIdentitas" class="w-full text-xs mb-6 border-collapse">
+                    <tr>
+                        <td class="w-24 font-bold py-1">Mata Pelajaran</td>
+                        <td class="w-3">:</td>
+                        <td id="docMapel" class="py-1">IPAS</td>
+                        <td class="w-24 font-bold py-1">Hari / Tanggal</td>
+                        <td class="w-3">:</td>
+                        <td id="docTanggal" class="py-1">Senin, 08 Desember 2025</td>
+                    </tr>
+                    <tr>
+                        <td class="font-bold py-1">Kelas / Semester</td>
+                        <td>:</td>
+                        <td id="docKelasSem" class="py-1">IV (Empat) / 1</td>
+                        <td class="font-bold py-1">Waktu</td>
+                        <td>:</td>
+                        <td id="docWaktu" class="py-1">07.30 - 09.00 WIB (90 Menit)</td>
+                    </tr>
+                    <tr>
+                        <td class="font-bold py-1">Nama Siswa</td>
+                        <td>:</td>
+                        <td class="py-1">........................................</td>
+                        <td class="font-bold py-1">No. Absen</td>
+                        <td>:</td>
+                        <td class="py-1">..........</td>
+                    </tr>
+                </table>
+
+                <!-- PETUNJUK UMUM -->
+                <div class="bg-slate-50 p-2.5 rounded border border-slate-300 text-xs mb-6 font-sans no-print">
+                    <span class="font-bold block mb-1">Petunjuk Umum:</span>
+                    <ol class="list-decimal list-inside space-y-0.5 text-slate-700">
+                        <li>Tulislah nama dan nomor absenmu pada kolom yang tersedia.</li>
+                        <li>Bacalah setiap soal dengan teliti sebelum menjawab.</li>
+                        <li>Kerjakan soal yang lebih mudah terlebih dahulu.</li>
+                        <li>Periksalah kembali lembar jawabanmu sebelum diserahkan kepada guru.</li>
+                    </ol>
+                </div>
+
+                <!-- BAGIAN A: PILIHAN GANDA -->
+                <div class="mb-6">
+                    <h3 class="font-bold text-sm mb-2 uppercase border-b border-black pb-1">
+                        A. Pilihan Ganda
+                    </h3>
+                    <p class="text-xs italic mb-3">Berilah tanda silang (X) pada huruf A, B, C, atau D pada jawaban yang paling benar!</p>
+                    
+                    <div id="containerBagianA" class="space-y-4">
+                        <!-- Items rendered by JS -->
+                    </div>
+                </div>
+
+                <!-- BAGIAN B: ISIAN SINGKAT / VARIATIF -->
+                <div class="mb-6">
+                    <h3 class="font-bold text-sm mb-2 uppercase border-b border-black pb-1">
+                        B. Isian Singkat
+                    </h3>
+                    <p class="text-xs italic mb-3">Isilah titik-titik di bawah ini dengan jawaban yang singkat dan tepat!</p>
+                    
+                    <div id="containerBagianB" class="space-y-3">
+                        <!-- Items rendered by JS -->
+                    </div>
+                </div>
+
+                <!-- BAGIAN C: ESSAY / URAIAN -->
+                <div class="mb-6">
+                    <h3 class="font-bold text-sm mb-2 uppercase border-b border-black pb-1">
+                        C. Soal Uraian / Essay
+                    </h3>
+                    <p class="text-xs italic mb-3">Jawablah pertanyaan-pertanyaan di bawah ini secara jelas, rinci, dan benar!</p>
+                    
+                    <div id="containerBagianC" class="space-y-4">
+                        <!-- Items rendered by JS -->
+                    </div>
+                </div>
+
+                <!-- INSTRUMEN PENILAIAN & KUNCI JAWABAN -->
+                <div class="mt-8 border-t-2 border-slate-800 pt-4 page-break-before">
+                    <h3 class="font-bold text-base mb-3 uppercase text-center bg-slate-100 py-1 border border-slate-300">
+                        INSTRUMEN PENILAIAN, KUNCI JAWABAN & PEDOMAN PENSKORAN
+                    </h3>
+
+                    <!-- Tabel Bobot Penilaian -->
+                    <div class="mb-6">
+                        <h4 class="font-bold text-xs uppercase mb-1">1. Rekapitulasi Bobot Skor Penilaian Ujian Tertulis</h4>
+                        <table class="w-full text-xs border border-black border-collapse text-center">
+                            <thead class="bg-slate-200">
+                                <tr>
+                                    <th class="border border-black p-1">Bentuk Soal</th>
+                                    <th class="border border-black p-1">Jumlah Soal</th>
+                                    <th class="border border-black p-1">Bobot Per Soal</th>
+                                    <th class="border border-black p-1">Skor Maksimal</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tabelBobotBody">
+                                <!-- Computed via JS -->
+                            </tbody>
+                        </table>
+                        <p class="text-[10pt] italic mt-1">* Rumus Nilai Akhir (N.A) = (Total Skor Perolehan / Total Skor Maksimal) x 100</p>
+                    </div>
+
+                    <!-- Kunci Jawaban Singkat -->
+                    <div class="mb-6">
+                        <h4 class="font-bold text-xs uppercase mb-2">2. Kunci Jawaban & Rubrik Penskoran Essay</h4>
+                        <div id="containerKunciJawaban" class="text-xs space-y-2">
+                            <!-- JS populated -->
+                        </div>
+                    </div>
+
+                    <!-- RUBRIK PENILAIAN PRAKTIK / UNJUK KERJA -->
+                    <div id="sectionRubrikPraktik" class="mb-6">
+                        <h4 class="font-bold text-xs uppercase mb-2">3. Instrumen & Rubrik Penilaian Praktik / Unjuk Kerja (Dapat Disesuaikan)</h4>
+                        <table class="w-full text-xs border border-black border-collapse">
+                            <thead class="bg-slate-200 text-center">
+                                <tr>
+                                    <th class="border border-black p-1.5 w-8">No</th>
+                                    <th class="border border-black p-1.5 w-1/4">Aspek Penilaian</th>
+                                    <th class="border border-black p-1.5">Skor 1 (Perlu Bimbingan)</th>
+                                    <th class="border border-black p-1.5">Skor 2 (Cukup)</th>
+                                    <th class="border border-black p-1.5">Skor 3 (Baik)</th>
+                                    <th class="border border-black p-1.5">Skor 4 (Sangat Baik)</th>
+                                </tr>
+                            </thead>
+                            <tbody id="containerRubrikPraktik">
+                                <!-- JS populated -->
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <!-- CUSTOM MODAL NOTIFICATION / EDIT QUESTION -->
+    <div id="modalOverlay" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4 no-print">
+        <div class="bg-white rounded-xl shadow-xl max-w-lg w-full p-5 space-y-4">
+            <div class="flex justify-between items-center border-b pb-2">
+                <h3 id="modalTitle" class="font-bold text-slate-800 text-base">Edit Soal</h3>
+                <button onclick="closeModal()" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <div id="modalBody" class="space-y-3 text-xs">
+                <!-- Dynamic form fields -->
+            </div>
+            <div class="flex justify-end space-x-2 border-t pt-3">
+                <button onclick="closeModal()" class="px-3 py-1.5 bg-slate-200 text-slate-700 rounded-md font-medium">Batal</button>
+                <button onclick="saveQuestionEdit()" class="px-4 py-1.5 bg-indigo-600 text-white rounded-md font-semibold">Simpan Perubahan</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // GLOBAL STATE STORE
+        let examState = {
+            jenisUjian: "SAS",
+            tingkatKelas: 4,
+            namaSekolah: "SD NEGERI 1 SUKAMAJU",
+            mataPelajaran: "IPAS (Ilmu Pengetahuan Alam & Sosial)",
+            semesterTA: "1 (Ganjil) / 2025/2026",
+            alokasiWaktu: "90 Menit",
+            sertakanArab: "tidak",
+            bagianA: [],
+            bagianB: [],
+            bagianC: [],
+            rubrikPraktik: []
+        };
+
+        let uploadedFileText = ""; 
+        let currentEditingItem = null;
+
+        function handleFileUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const nameDisplay = document.getElementById('fileNameDisplay');
+            const infoBox = document.getElementById('fileInfoBox');
+            const infoText = document.getElementById('fileInfoText');
+
+            nameDisplay.innerText = file.name;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                uploadedFileText = e.target.result;
+                infoText.innerHTML = `<i class="fa-solid fa-check-circle mr-1 text-emerald-600"></i> ${file.name} (${(file.size / 1024).toFixed(1)} KB)`;
+                infoBox.classList.remove('hidden');
+            };
+
+            reader.onerror = function() {
+                alert("Gagal membaca file referensi. Silakan coba file bertipe teks (.txt, .md, .csv, dll).");
+                removeUploadedFile();
+            };
+
+            reader.readAsText(file);
+        }
+
+        function removeUploadedFile() {
+            document.getElementById('fileReferensi').value = '';
+            document.getElementById('fileNameDisplay').innerText = 'Klik untuk Pilih File Referensi...';
+            document.getElementById('fileInfoBox').classList.add('hidden');
+            uploadedFileText = "";
+        }
+
+        function onKelasChange() {
+            const k = parseInt(document.getElementById('tingkatKelas').value);
+            const selectKomposisi = document.getElementById('komposisiSoal');
+            selectKomposisi.innerHTML = '';
+
+            if (k === 1 || k === 2) {
+                const opt = document.createElement('option');
+                opt.value = '10';
+                opt.textContent = '10 PG + 5 Isian Singkat (+ 5 Essay)';
+                selectKomposisi.appendChild(opt);
+            } else if (k === 3 || k === 4) {
+                const opt1 = document.createElement('option');
+                opt1.value = '15';
+                opt1.textContent = '15 Soal PG + 10 Soal Isian Singkat';
+                
+                const opt2 = document.createElement('option');
+                opt2.value = '20';
+                opt2.textContent = '20 Soal PG + 5 Soal Isian Singkat';
+                
+                selectKomposisi.appendChild(opt1);
+                selectKomposisi.appendChild(opt2);
+            } else if (k === 5 || k === 6) {
+                const opt1 = document.createElement('option');
+                opt1.value = '20';
+                opt1.textContent = '20 Soal PG + 10 Soal Isian Singkat';
+                
+                const opt2 = document.createElement('option');
+                opt2.value = '25';
+                opt2.textContent = '25 Soal PG + 5 Soal Isian Singkat';
+                
+                selectKomposisi.appendChild(opt1);
+                selectKomposisi.appendChild(opt2);
+            }
+
+            updateRuleNotice();
+        }
+
+        function getExamRules(kelas, pgChoice) {
+            const k = parseInt(kelas);
+            let totalSoal = 30;
+            let countA = 15;
+            let countB = 10;
+            let countC = 5;
+            let hotsC = 2;
+
+            if (k === 1 || k === 2) {
+                totalSoal = 20;
+                countA = 10;
+                countB = 5;
+                countC = 5;
+                hotsC = 2;
+            } else if (k === 3 || k === 4) {
+                totalSoal = 30;
+                hotsC = (k === 3) ? 2 : 3;
+                if (pgChoice === '20') {
+                    countA = 20;
+                    countB = 5;
+                } else {
+                    countA = 15;
+                    countB = 10;
+                }
+            } else if (k === 5 || k === 6) {
+                totalSoal = 35;
+                hotsC = 3;
+                if (pgChoice === '25') {
+                    countA = 25;
+                    countB = 5;
+                } else {
+                    countA = 20;
+                    countB = 10;
+                }
+            }
+
+            return {
+                totalSoal,
+                countA,
+                countB,
+                countC,
+                hotsC,
+                litNumA: 2,
+                litNumC: 1
+            };
+        }
+
+        function updateRuleNotice() {
+            const k = document.getElementById('tingkatKelas').value;
+            const jenis = document.getElementById('jenisUjian').value;
+            const pgChoice = document.getElementById('komposisiSoal').value || '15';
+            const rules = getExamRules(k, pgChoice);
+
+            const box = document.getElementById('ruleNoticeBox');
+            box.innerHTML = `
+                <div class="font-bold flex items-center">
+                    <i class="fa-solid fa-circle-info text-amber-600 mr-1.5"></i>
+                    Ketentuan Penyusunan Kelas ${k} (${jenis}):
+                </div>
+                <ul class="list-disc list-inside space-y-0.5 text-[11px] mt-1 text-amber-800">
+                    <li>Total Soal: <strong>${rules.totalSoal} Soal</strong></li>
+                    <li>Bagian A (Pilihan Ganda): <strong>${rules.countA} Soal</strong> (Termasuk 2 Literasi & Numerasi)</li>
+                    <li>Bagian B (Isian Singkat/Bebas): <strong>${rules.countB} Soal</strong></li>
+                    <li>Bagian C (Essay/Uraian): <strong>${rules.countC} Soal</strong> (Termasuk 1 Literasi & Numerasi)</li>
+                    <li>Jumlah Soal HOTS Essay: <strong class="text-indigo-900 bg-amber-200 px-1 rounded">${rules.hotsC} Soal HOTS</strong> (Khusus Kelas ${k})</li>
+                </ul>
+            `;
+        }
+
+        function setActiveTab(tab) {
+            const formCol = document.getElementById('formContainer');
+            const previewCol = document.getElementById('previewContainer');
+            const btnForm = document.getElementById('tabBtnForm');
+            const btnPreview = document.getElementById('tabBtnPreview');
+
+            if (tab === 'form') {
+                formCol.classList.remove('hidden');
+                previewCol.classList.add('hidden', 'lg:flex');
+                btnForm.className = "px-3 py-1.5 rounded-md text-sm font-medium bg-indigo-700 text-white";
+                btnPreview.className = "px-3 py-1.5 rounded-md text-sm font-medium bg-indigo-950 text-indigo-200";
+            } else {
+                formCol.classList.add('hidden', 'lg:block');
+                previewCol.classList.remove('hidden');
+                previewCol.classList.add('flex');
+                btnPreview.className = "px-3 py-1.5 rounded-md text-sm font-medium bg-indigo-700 text-white";
+                btnForm.className = "px-3 py-1.5 rounded-md text-sm font-medium bg-indigo-950 text-indigo-200";
+            }
+        }
+
+        window.onload = function() {
+            onKelasChange();
+            loadSampleTemplate();
+        };
+
+        async function handleGenerate(e) {
+            e.preventDefault();
+            
+            const jenisUjian = document.getElementById('jenisUjian').value;
+            const kelas = document.getElementById('tingkatKelas').value;
+            const pgChoice = document.getElementById('komposisiSoal').value;
+            const namaSekolah = document.getElementById('namaSekolah').value || "SD NEGERI 1 SUKAMAJU";
+            const mataPelajaran = document.getElementById('mataPelajaran').value || "IPAS";
+            const semesterTA = document.getElementById('semesterTA').value || "1 (Ganjil)";
+            const alokasiWaktu = document.getElementById('alokasiWaktu').value || "90 Menit";
+            const sertakanArab = document.getElementById('sertakanArab').value;
+            const topikMateri = document.getElementById('topikMateri').value || "Materi Umum Kurikulum Merdeka";
+            const instruksiTambahan = document.getElementById('instruksiTambahan').value;
+            const customApiKey = document.getElementById('customApiKey').value;
+
+            const rules = getExamRules(kelas, pgChoice);
+
+            document.getElementById('loadingOverlay').classList.remove('hidden');
+            document.getElementById('documentCanvas').classList.add('hidden');
+
+            let promptExtras = "";
+            if (instruksiTambahan.trim() !== "") {
+                promptExtras += `\n\nCatatan/Instruksi Khusus Tambahan dari Guru:\n${instruksiTambahan}`;
+            }
+            if (uploadedFileText.trim() !== "") {
+                promptExtras += `\n\nTeks Referensi / Bahan Latihan Tambahan yang Diunggah Guru:\n"""\n${uploadedFileText.substring(0, 4000)}\n"""`;
+            }
+
+            const systemPrompt = `Anda adalah tim ahli pengembang soal dan penguji Kurikulum Merdeka SD/MI.
+Tugas Anda adalah membuat naskah soal lengkap beserta Kunci Jawaban dan Rubrik Penilaian Praktik/Kinerja.
+
+Ketentuan Wajib Penyusunan:
+- Evaluasi: ${jenisUjian}
+- Tingkat: Kelas ${kelas} SD/MI
+- Mata Pelajaran: ${mataPelajaran}
+- Topik / Capaian Pembelajaran: ${topikMateri}
+- Sertakan teks/kalimat Bahasa Arab jika relevan: ${sertakanArab === 'ya' ? 'YA (Gunakan teks Arab standar 14pt jika ada)' : 'TIDAK'}
+
+Jumlah Soal yang Wajib Dibuat:
+1. Bagian A (Pilihan Ganda): ${rules.countA} Soal. Tepat 2 soal di antaranya BERFORMAT LITERASI & NUMERASI (dengan tabel/cerita/grafik deskriptif).
+2. Bagian B (Isian Singkat/Variatif): ${rules.countB} Soal.
+3. Bagian C (Essay/Uraian): ${rules.countC} Soal. Wajib memuat:
+   - 1 Soal Literasi & Numerasi
+   - Tepat ${rules.hotsC} Soal HOTS (Higher Order Thinking Skills - Penalaran/Analisis C4-C6).
+
+4. Rubrik Penilaian Praktik: Buat 3 aspek penilaian unjuk kerja/praktik yang relevan dengan mata pelajaran ini.${promptExtras}`;
+
+            const userPrompt = `Buatkan JSON struktur soal lengkap sesuai ketentuan tersebut.`;
+
+            const jsonSchema = {
+                type: "OBJECT",
+                properties: {
+                    bagianA: {
+                        type: "ARRAY",
+                        items: {
+                            type: "OBJECT",
+                            properties: {
+                                soal: { type: "STRING" },
+                                opsi: { type: "ARRAY", items: { type: "STRING" } },
+                                kunci: { type: "STRING" },
+                                isLiterasiNumerasi: { type: "BOOLEAN" }
+                            },
+                            required: ["soal", "opsi", "kunci"]
+                        }
+                    },
+                    bagianB: {
+                        type: "ARRAY",
+                        items: {
+                            type: "OBJECT",
+                            properties: {
+                                soal: { type: "STRING" },
+                                kunci: { type: "STRING" }
+                            },
+                            required: ["soal", "kunci"]
+                        }
+                    },
+                    bagianC: {
+                        type: "ARRAY",
+                        items: {
+                            type: "OBJECT",
+                            properties: {
+                                soal: { type: "STRING" },
+                                kunci: { type: "STRING" },
+                                isLiterasiNumerasi: { type: "BOOLEAN" },
+                                isHots: { type: "BOOLEAN" }
+                            },
+                            required: ["soal", "kunci"]
+                        }
+                    },
+                    rubrikPraktik: {
+                        type: "ARRAY",
+                        items: {
+                            type: "OBJECT",
+                            properties: {
+                                aspek: { type: "STRING" },
+                                skor1: { type: "STRING" },
+                                skor2: { type: "STRING" },
+                                skor3: { type: "STRING" },
+                                skor4: { type: "STRING" }
+                            },
+                            required: ["aspek", "skor1", "skor2", "skor3", "skor4"]
+                        }
+                    }
+                },
+                required: ["bagianA", "bagianB", "bagianC", "rubrikPraktik"]
+            };
+
+            const apiKey = customApiKey || "";
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
+
+            const payload = {
+                contents: [{ parts: [{ text: userPrompt }] }],
+                systemInstruction: { parts: [{ text: systemPrompt }] },
+                generationConfig: {
+                    responseMimeType: "application/json",
+                    responseSchema: jsonSchema
+                }
+            };
+
+            try {
+                const response = await fetchWithRetry(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                const result = await response.json();
+                
+                if (result.candidates && result.candidates[0]?.content?.parts?.[0]?.text) {
+                    const parsedData = JSON.parse(result.candidates[0].content.parts[0].text);
+                    
+                    examState = {
+                        jenisUjian,
+                        tingkatKelas: parseInt(kelas),
+                        namaSekolah,
+                        mataPelajaran,
+                        semesterTA,
+                        alokasiWaktu,
+                        sertakanArab,
+                        bagianA: parsedData.bagianA || [],
+                        bagianB: parsedData.bagianB || [],
+                        bagianC: parsedData.bagianC || [],
+                        rubrikPraktik: parsedData.rubrikPraktik || []
+                    };
+
+                    renderExamDocument();
+                    setActiveTab('preview');
+                } else {
+                    throw new Error("Struktur jawaban AI tidak sesuai.");
+                }
+
+            } catch (err) {
+                console.warn("Gagal menghubungi AI Gemini, menggunakan pembuat otomatis lokal...", err);
+                generateFallbackState(jenisUjian, kelas, pgChoice, namaSekolah, mataPelajaran, semesterTA, alokasiWaktu, sertakanArab, topikMateri, instruksiTambahan);
+                renderExamDocument();
+                setActiveTab('preview');
+            } finally {
+                document.getElementById('loadingOverlay').classList.add('hidden');
+                document.getElementById('documentCanvas').classList.remove('hidden');
+            }
+        }
+
+        async function fetchWithRetry(url, options, retries = 3, backoff = 1000) {
+            try {
+                const res = await fetch(url, options);
+                if (!res.ok) throw new Error(`HTTP Error: ${res.status}`);
+                return res;
+            } catch (err) {
+                if (retries <= 1) throw err;
+                await new Promise(r => setTimeout(r, backoff));
+                return fetchWithRetry(url, options, retries - 1, backoff * 2);
+            }
+        }
+
+        function generateFallbackState(jenis, kelas, pgChoice, sekolah, mapel, sem, waktu, arab, topik, instruksi) {
+            const rules = getExamRules(kelas, pgChoice);
+            
+            const bagianA = [];
+            for (let i = 1; i <= rules.countA; i++) {
+                const isLitNum = (i === 1 || i === 2);
+                let textSoal = `Contoh pertanyaan Pilihan Ganda nomor ${i} mengenai ${topik}. Apa fungsi utama dari konsep ini dalam kehidupan sehari-hari?`;
+                if (isLitNum) {
+                    textSoal = `[Soal Literasi & Numerasi] Berdasarkan data grafik pengamatan, suhu lingkungan meningkat dari 25°C menjadi 30°C dalam waktu 2 jam. Berapakah rata-rata kenaikan suhu per jam?`;
+                }
+                if (arab === 'ya' && i === 3) {
+                    textSoal += ` <span class="arabic-text">بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ</span> (Pilihlah makna ayat berikut)`;
+                }
+                bagianA.push({
+                    soal: textSoal,
+                    opsi: ["A. Meningkat 2,5°C per jam", "B. Meningkat 5°C per jam", "C. Meningkat 10°C per jam", "D. Tetap konstan"],
+                    kunci: "A",
+                    isLiterasiNumerasi: isLitNum
+                });
+            }
+
+            const bagianB = [];
+            for (let i = 1; i <= rules.countB; i++) {
+                bagianB.push({
+                    soal: `Sebutkan nama proses perubahan wujud benda dari cair menjadi gas akibat pemanasan pada materi ${topik}!`,
+                    kunci: "Menguap"
+                });
+            }
+
+            const bagianC = [];
+            for (let i = 1; i <= rules.countC; i++) {
+                const isLit = (i === 1);
+                const isHots = (i > 1 && i <= 1 + rules.hotsC);
+                
+                let titlePrefix = "";
+                if (isHots) titlePrefix = "[Soal HOTS - Analisis C4] ";
+                else if (isLit) titlePrefix = "[Soal Literasi & Numerasi] ";
+
+                bagianC.push({
+                    soal: `${titlePrefix}Jelaskan dampak lingkungan jika ekosistem sekitar terganggu dan rumuskan 3 langkah solutif yang dapat dilakukan oleh siswa SD!`,
+                    kunci: "1. Menjaga kebersihan lingkungan. 2. Melakukan penghijauan/reboisasi. 3. Mengurangi penggunaan plastik sekali pakai.",
+                    isLiterasiNumerasi: isLit,
+                    isHots: isHots
+                });
+            }
+
+            const rubrikPraktik = [
+                {
+                    aspek: "Persiapan Alat & Bahan",
+                    skor1: "Tidak membawa alat dan bahan yang ditentukan",
+                    skor2: "Membawa sebagian kecil alat dan bahan",
+                    skor3: "Membawa sebagian besar alat dan bahan",
+                    skor4: "Membawa seluruh alat dan bahan secara lengkap"
+                },
+                {
+                    aspek: "Pelaksanaan Prosedur Kerja",
+                    skor1: "Tidak melakukan prosedur percobaan dengan benar",
+                    skor2: "Melakukan prosedur dengan banyak bimbingan guru",
+                    skor3: "Melakukan prosedur dengan sedikit bimbingan",
+                    skor4: "Melakukan prosedur secara mandiri dan sistematis"
+                },
+                {
+                    aspek: "Pelaporan & Presentasi Hasil",
+                    skor1: "Tidak dapat menyajikan data hasil pengamatan",
+                    skor2: "Penyajikan data kurang rapi dan penjelasan belum jelas",
+                    skor3: "Penyajikan data rapi dan penjelasan cukup jelas",
+                    skor4: "Penyajikan data sangat rapi, sistematis dan analisis tepat"
+                }
+            ];
+
+            examState = {
+                jenisUjian: jenis,
+                tingkatKelas: parseInt(kelas),
+                namaSekolah: sekolah,
+                mataPelajaran: mapel,
+                semesterTA: sem,
+                alokasiWaktu: waktu,
+                sertakanArab: arab,
+                bagianA,
+                bagianB,
+                bagianC,
+                rubrikPraktik
+            };
+        }
+
+        function loadSampleTemplate() {
+            const k = document.getElementById('tingkatKelas').value || "4";
+            const pgChoice = document.getElementById('komposisiSoal').value || "15";
+            generateFallbackState("SAS", k, pgChoice, "SD NEGERI 1 SUKAMAJU", "IPAS (Ilmu Pengetahuan Alam & Sosial)", "1 (Ganjil) / 2025/2026", "90 Menit", "tidak", "Fotosintesis & Wujud Benda", "");
+            renderExamDocument();
+        }
+
+        // Helper untuk memastikan format prefiks A., B., C., D. selalu konsisten
+        function formatOptionText(text, index) {
+            const letters = ['A', 'B', 'C', 'D'];
+            const letter = letters[index] || 'A';
+            if (!text) return `${letter}. `;
+            const cleanText = text.trim();
+            
+            // Bersihkan jika ada simbol/huruf awalan lama
+            const strippedText = cleanText.replace(/^[A-Da-d][\.\)\-\s]+\s*/, '');
+            return `${letter}. ${strippedText}`;
+        }
+
+        function renderExamDocument() {
+            document.getElementById('docNamaSekolah').innerText = examState.namaSekolah;
+            
+            let jenisFull = "SUMATIF TENGAH SEMESTER (STS)";
+            if (examState.jenisUjian === "SAS") jenisFull = "SUMATIF AKHIR SEMESTER (SAS)";
+            else if (examState.jenisUjian === "SAT") jenisFull = "SUMATIF AKHIR TAHUN (SAT)";
+            else if (examState.jenisUjian === "PRAKTIK") jenisFull = "LEMBAR ASESMEN UJIAN PRAKTIK / UNJUK KERJA";
+
+            document.getElementById('docJudulUjian').innerText = jenisFull;
+            document.getElementById('docTA').innerText = examState.semesterTA;
+            document.getElementById('docMapel').innerText = examState.mataPelajaran;
+            document.getElementById('docKelasSem').innerText = `Kelas ${examState.tingkatKelas} / ${examState.semesterTA}`;
+            document.getElementById('docWaktu').innerText = examState.alokasiWaktu;
+
+            // 1. Render Bagian A
+            const containerA = document.getElementById('containerBagianA');
+            containerA.innerHTML = '';
+            examState.bagianA.forEach((item, idx) => {
+                const div = document.createElement('div');
+                div.className = 'relative group border-b border-slate-100 pb-2';
+                
+                let tagBadge = '';
+                if (item.isLiterasiNumerasi) {
+                    tagBadge = `<span class="inline-block bg-sky-100 text-sky-800 text-[10px] font-bold px-2 py-0.5 rounded ml-2 no-print">[Literasi & Numerasi]</span>`;
+                }
+
+                div.innerHTML = `
+                    <div class="flex justify-between items-start">
+                        <div class="text-xs font-normal">
+                            <span class="font-bold">${idx + 1}.</span> ${item.soal} ${tagBadge}
+                        </div>
+                        <div class="hidden group-hover:flex space-x-1 no-print">
+                            <button onclick="editQuestion('A', ${idx})" class="text-xs bg-amber-100 text-amber-800 px-1.5 py-0.5 rounded hover:bg-amber-200">Edit</button>
+                            <button onclick="deleteQuestion('A', ${idx})" class="text-xs bg-rose-100 text-rose-800 px-1.5 py-0.5 rounded hover:bg-rose-200">Hapus</button>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-1 text-xs mt-1.5 pl-4 option-grid">
+                        ${item.opsi.map((opt, oIdx) => `<div>${formatOptionText(opt, oIdx)}</div>`).join('')}
+                    </div>
+                `;
+                containerA.appendChild(div);
+            });
+
+            // 2. Render Bagian B
+            const containerB = document.getElementById('containerBagianB');
+            containerB.innerHTML = '';
+            examState.bagianB.forEach((item, idx) => {
+                const noStr = examState.bagianA.length + idx + 1;
+                const div = document.createElement('div');
+                div.className = 'relative group border-b border-slate-100 pb-2';
+                div.innerHTML = `
+                    <div class="flex justify-between items-start text-xs">
+                        <div>
+                            <span class="font-bold">${noStr}.</span> ${item.soal}
+                        </div>
+                        <div class="hidden group-hover:flex space-x-1 no-print">
+                            <button onclick="editQuestion('B', ${idx})" class="text-xs bg-amber-100 text-amber-800 px-1.5 py-0.5 rounded hover:bg-amber-200">Edit</button>
+                            <button onclick="deleteQuestion('B', ${idx})" class="text-xs bg-rose-100 text-rose-800 px-1.5 py-0.5 rounded hover:bg-rose-200">Hapus</button>
+                        </div>
+                    </div>
+                `;
+                containerB.appendChild(div);
+            });
+
+            // 3. Render Bagian C
+            const containerC = document.getElementById('containerBagianC');
+            containerC.innerHTML = '';
+            examState.bagianC.forEach((item, idx) => {
+                const noStr = examState.bagianA.length + examState.bagianB.length + idx + 1;
+                const div = document.createElement('div');
+                div.className = 'relative group border-b border-slate-100 pb-3';
+
+                let tagBadge = '';
+                if (item.isHots) {
+                    tagBadge += `<span class="inline-block bg-purple-100 text-purple-800 text-[10px] font-bold px-2 py-0.5 rounded ml-2 no-print">[HOTS]</span>`;
+                }
+                if (item.isLiterasiNumerasi) {
+                    tagBadge += `<span class="inline-block bg-sky-100 text-sky-800 text-[10px] font-bold px-2 py-0.5 rounded ml-2 no-print">[Literasi & Numerasi]</span>`;
+                }
+
+                div.innerHTML = `
+                    <div class="flex justify-between items-start text-xs">
+                        <div>
+                            <span class="font-bold">${noStr}.</span> ${item.soal} ${tagBadge}
+                        </div>
+                        <div class="hidden group-hover:flex space-x-1 no-print">
+                            <button onclick="editQuestion('C', ${idx})" class="text-xs bg-amber-100 text-amber-800 px-1.5 py-0.5 rounded hover:bg-amber-200">Edit</button>
+                            <button onclick="deleteQuestion('C', ${idx})" class="text-xs bg-rose-100 text-rose-800 px-1.5 py-0.5 rounded hover:bg-rose-200">Hapus</button>
+                        </div>
+                    </div>
+                    <div class="mt-4 border-b border-dashed border-slate-300 min-h-[40px]"></div>
+                `;
+                containerC.appendChild(div);
+            });
+
+            // 4. Render Tabel Rekap Bobot Penilaian
+            const countA = examState.bagianA.length;
+            const countB = examState.bagianB.length;
+            const countC = examState.bagianC.length;
+
+            const bobotA = 1;
+            const bobotB = 2;
+            const bobotC = 4;
+
+            const totalSkorA = countA * bobotA;
+            const totalSkorB = countB * bobotB;
+            const totalSkorC = countC * bobotC;
+            const grandTotalSkor = totalSkorA + totalSkorB + totalSkorC;
+
+            const bodyBobot = document.getElementById('tabelBobotBody');
+            bodyBobot.innerHTML = `
+                <tr>
+                    <td class="border border-black p-1 text-left pl-2">A. Pilihan Ganda</td>
+                    <td class="border border-black p-1">${countA}</td>
+                    <td class="border border-black p-1">${bobotA}</td>
+                    <td class="border border-black p-1">${totalSkorA}</td>
+                </tr>
+                <tr>
+                    <td class="border border-black p-1 text-left pl-2">B. Isian Singkat</td>
+                    <td class="border border-black p-1">${countB}</td>
+                    <td class="border border-black p-1">${bobotB}</td>
+                    <td class="border border-black p-1">${totalSkorB}</td>
+                </tr>
+                <tr>
+                    <td class="border border-black p-1 text-left pl-2">C. Essay / Uraian</td>
+                    <td class="border border-black p-1">${countC}</td>
+                    <td class="border border-black p-1">${bobotC}</td>
+                    <td class="border border-black p-1">${totalSkorC}</td>
+                </tr>
+                <tr class="font-bold bg-slate-100">
+                    <td class="border border-black p-1 text-left pl-2" colspan="3">TOTAL SKOR MAKSIMAL</td>
+                    <td class="border border-black p-1">${grandTotalSkor}</td>
+                </tr>
+            `;
+
+            // 5. Render Kunci Jawaban
+            const containerKunci = document.getElementById('containerKunciJawaban');
+            containerKunci.innerHTML = `
+                <div class="font-semibold mb-1">A. Pilihan Ganda:</div>
+                <div class="grid grid-cols-5 gap-1 bg-slate-50 p-2 rounded border border-slate-200 mb-2 font-mono text-[11px]">
+                    ${examState.bagianA.map((item, i) => `<div><strong>${i + 1}.</strong> ${item.kunci || 'A'}</div>`).join('')}
+                </div>
+
+                <div class="font-semibold mb-1">B. Isian Singkat:</div>
+                <ol class="list-decimal list-inside space-y-0.5 pl-2 mb-2">
+                    ${examState.bagianB.map((item, i) => `<li>${item.kunci || '-'}</li>`).join('')}
+                </ol>
+
+                <div class="font-semibold mb-1">C. Essay & Pedoman Penskoran:</div>
+                <ol class="list-decimal list-inside space-y-1 pl-2">
+                    ${examState.bagianC.map((item, i) => `
+                        <li>
+                            <span class="font-medium">Soal ${countA + countB + i + 1}:</span> ${item.kunci || '-'} 
+                            <span class="text-slate-500 text-[10px] italic">(Skor Maks: 4)</span>
+                        </li>
+                    `).join('')}
+                </ol>
+            `;
+
+            // 6. Render Rubrik Praktik
+            const containerPraktik = document.getElementById('containerRubrikPraktik');
+            containerPraktik.innerHTML = '';
+            examState.rubrikPraktik.forEach((r, i) => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td class="border border-black p-1 text-center font-bold">${i + 1}</td>
+                    <td class="border border-black p-1 font-medium">${r.aspek}</td>
+                    <td class="border border-black p-1 text-[11px]">${r.skor1}</td>
+                    <td class="border border-black p-1 text-[11px]">${r.skor2}</td>
+                    <td class="border border-black p-1 text-[11px]">${r.skor3}</td>
+                    <td class="border border-black p-1 text-[11px]">${r.skor4}</td>
+                `;
+                containerPraktik.appendChild(tr);
+            });
+        }
+
+        function editQuestion(part, index) {
+            currentEditingItem = { part, index };
+            const modal = document.getElementById('modalOverlay');
+            const title = document.getElementById('modalTitle');
+            const body = document.getElementById('modalBody');
+
+            title.innerText = `Edit Soal Bagian ${part} (Nomor ${index + 1})`;
+            body.innerHTML = '';
+
+            let item = null;
+            if (part === 'A') item = examState.bagianA[index];
+            else if (part === 'B') item = examState.bagianB[index];
+            else if (part === 'C') item = examState.bagianC[index];
+
+            if (!item) return;
+
+            let html = `
+                <div>
+                    <label class="block font-semibold mb-1">Teks Pertanyaan / Soal</label>
+                    <textarea id="editSoalText" rows="3" class="w-full border rounded p-2 text-xs focus:ring-1 focus:ring-indigo-500">${item.soal}</textarea>
+                </div>
+            `;
+
+            if (part === 'A') {
+                html += `
+                    <div>
+                        <label class="block font-semibold mb-1">Pilihan Jawaban (A, B, C, D)</label>
+                        <input type="text" id="editOpsi0" value="${item.opsi[0] || ''}" class="w-full border rounded p-1 mb-1">
+                        <input type="text" id="editOpsi1" value="${item.opsi[1] || ''}" class="w-full border rounded p-1 mb-1">
+                        <input type="text" id="editOpsi2" value="${item.opsi[2] || ''}" class="w-full border rounded p-1 mb-1">
+                        <input type="text" id="editOpsi3" value="${item.opsi[3] || ''}" class="w-full border rounded p-1 mb-1">
+                    </div>
+                    <div>
+                        <label class="block font-semibold mb-1">Kunci Jawaban (A/B/C/D)</label>
+                        <input type="text" id="editKunci" value="${item.kunci || 'A'}" class="w-16 border rounded p-1 text-center font-bold">
+                    </div>
+                    <div class="flex items-center space-x-2 pt-1">
+                        <input type="checkbox" id="editIsLitNum" ${item.isLiterasiNumerasi ? 'checked' : ''}>
+                        <label for="editIsLitNum" class="font-medium text-slate-700">Tandai Soal Literasi & Numerasi</label>
+                    </div>
+                `;
+            } else if (part === 'B' || part === 'C') {
+                html += `
+                    <div>
+                        <label class="block font-semibold mb-1">Kunci Jawaban / Pedoman Penskoran</label>
+                        <textarea id="editKunci" rows="2" class="w-full border rounded p-2 text-xs">${item.kunci || ''}</textarea>
+                    </div>
+                `;
+                if (part === 'C') {
+                    html += `
+                        <div class="flex items-center space-x-4 pt-1">
+                            <label class="flex items-center space-x-1 cursor-pointer">
+                                <input type="checkbox" id="editIsHots" ${item.isHots ? 'checked' : ''}>
+                                <span class="font-medium text-purple-800">Soal HOTS</span>
+                            </label>
+                            <label class="flex items-center space-x-1 cursor-pointer">
+                                <input type="checkbox" id="editIsLitNum" ${item.isLiterasiNumerasi ? 'checked' : ''}>
+                                <span class="font-medium text-sky-800">Literasi & Numerasi</span>
+                            </label>
+                        </div>
+                    `;
+                }
+            }
+
+            body.innerHTML = html;
+            modal.classList.remove('hidden');
+        }
+
+        function saveQuestionEdit() {
+            if (!currentEditingItem) return;
+            const { part, index } = currentEditingItem;
+            
+            const soalText = document.getElementById('editSoalText').value;
+
+            if (part === 'A') {
+                const o0 = document.getElementById('editOpsi0').value;
+                const o1 = document.getElementById('editOpsi1').value;
+                const o2 = document.getElementById('editOpsi2').value;
+                const o3 = document.getElementById('editOpsi3').value;
+                const kunci = document.getElementById('editKunci').value;
+                const isLitNum = document.getElementById('editIsLitNum').checked;
+
+                examState.bagianA[index] = {
+                    soal: soalText,
+                    opsi: [o0, o1, o2, o3],
+                    kunci: kunci.toUpperCase(),
+                    isLiterasiNumerasi: isLitNum
+                };
+            } else if (part === 'B') {
+                const kunci = document.getElementById('editKunci').value;
+                examState.bagianB[index] = {
+                    soal: soalText,
+                    kunci: kunci
+                };
+            } else if (part === 'C') {
+                const kunci = document.getElementById('editKunci').value;
+                const isHots = document.getElementById('editIsHots').checked;
+                const isLitNum = document.getElementById('editIsLitNum').checked;
+                examState.bagianC[index] = {
+                    soal: soalText,
+                    kunci: kunci,
+                    isHots: isHots,
+                    isLiterasiNumerasi: isLitNum
+                };
+            }
+
+            closeModal();
+            renderExamDocument();
+        }
+
+        function deleteQuestion(part, index) {
+            if (part === 'A') examState.bagianA.splice(index, 1);
+            else if (part === 'B') examState.bagianB.splice(index, 1);
+            else if (part === 'C') examState.bagianC.splice(index, 1);
+            renderExamDocument();
+        }
+
+        function addNewQuestionModal() {
+            const part = prompt("Pilih bagian yang ingin ditambah (A, B, atau C):", "A");
+            if (!part) return;
+            const pUpper = part.toUpperCase();
+            if (pUpper === 'A') {
+                examState.bagianA.push({
+                    soal: "Pertanyaan pilihan ganda baru...",
+                    opsi: ["A. Pilihan A", "B. Pilihan B", "C. Pilihan C", "D. Pilihan D"],
+                    kunci: "A",
+                    isLiterasiNumerasi: false
+                });
+            } else if (pUpper === 'B') {
+                examState.bagianB.push({
+                    soal: "Pertanyaan isian singkat baru...",
+                    kunci: "Jawaban"
+                });
+            } else if (pUpper === 'C') {
+                examState.bagianC.push({
+                    soal: "Pertanyaan essay / uraian baru...",
+                    kunci: "Pedoman jawaban",
+                    isHots: true,
+                    isLiterasiNumerasi: false
+                });
+            }
+            renderExamDocument();
+        }
+
+        function closeModal() {
+            document.getElementById('modalOverlay').classList.add('hidden');
+            currentEditingItem = null;
+        }
+
+        // ENHANCED EXPORT TO MS WORD (.DOC) FUNCTION
+        function exportToWord() {
+            // 1. Clone element document canvas
+            const canvasContent = document.getElementById('documentCanvas').cloneNode(true);
+            
+            // 2. Remove all UI / action elements (no-print)
+            canvasContent.querySelectorAll('.no-print').forEach(el => el.remove());
+
+            // 3. Transform CSS Grid Options (A, B, C, D) into Word HTML Table (2 columns) without borders
+            const optionGrids = canvasContent.querySelectorAll('.option-grid');
+            optionGrids.forEach(grid => {
+                const optionNodes = Array.from(grid.children);
+                if (optionNodes.length === 4) {
+                    const opt0 = formatOptionText(optionNodes[0].innerText || optionNodes[0].textContent, 0);
+                    const opt1 = formatOptionText(optionNodes[1].innerText || optionNodes[1].textContent, 1);
+                    const opt2 = formatOptionText(optionNodes[2].innerText || optionNodes[2].textContent, 2);
+                    const opt3 = formatOptionText(optionNodes[3].innerText || optionNodes[3].textContent, 3);
+
+                    const tableOpts = document.createElement('table');
+                    tableOpts.className = 'options-table-word';
+                    tableOpts.setAttribute('border', '0');
+                    tableOpts.setAttribute('cellpadding', '0');
+                    tableOpts.setAttribute('cellspacing', '0');
+                    tableOpts.setAttribute('style', 'width:100%; margin-top:2px; margin-bottom:6px; border:none; border-collapse:collapse; font-family:"Times New Roman", serif; font-size:12pt; line-height:1.5;');
+                    tableOpts.innerHTML = `
+                        <tr>
+                            <td style="width:50%; vertical-align:top; border:none; padding:2px 0; line-height:1.5; font-family:'Times New Roman', serif; font-size:12pt;">${opt0}</td>
+                            <td style="width:50%; vertical-align:top; border:none; padding:2px 0; line-height:1.5; font-family:'Times New Roman', serif; font-size:12pt;">${opt1}</td>
+                        </tr>
+                        <tr>
+                            <td style="width:50%; vertical-align:top; border:none; padding:2px 0; line-height:1.5; font-family:'Times New Roman', serif; font-size:12pt;">${opt2}</td>
+                            <td style="width:50%; vertical-align:top; border:none; padding:2px 0; line-height:1.5; font-family:'Times New Roman', serif; font-size:12pt;">${opt3}</td>
+                        </tr>
+                    `;
+                    grid.parentNode.replaceChild(tableOpts, grid);
+                }
+            });
+
+            // 4. Handle table formatting specifically
+            const allTables = canvasContent.querySelectorAll('table');
+            allTables.forEach(table => {
+                if (table.classList.contains('options-table-word')) {
+                    // Option tables: strict no border
+                    table.setAttribute('border', '0');
+                    table.setAttribute('style', 'width:100%; border-collapse:collapse; margin-top:2px; margin-bottom:6px; font-family:"Times New Roman", serif; font-size:12pt; line-height:1.5; border:none;');
+                    table.querySelectorAll('td').forEach(td => {
+                        td.setAttribute('style', 'border:none !important; padding:2px 0; vertical-align:top; line-height:1.5;');
+                    });
+                } else if (table.id === 'tableIdentitas' || table.classList.contains('identitas-table')) {
+                    // Identity table: borderless
+                    table.setAttribute('border', '0');
+                    table.setAttribute('style', 'width:100%; border-collapse:collapse; margin-bottom:16px; font-family:"Times New Roman", serif; font-size:12pt; line-height:1.5; border:none;');
+                    table.querySelectorAll('td').forEach(td => {
+                        td.setAttribute('style', 'border:none !important; padding:2px 4px; vertical-align:top; line-height:1.5;');
+                    });
+                } else {
+                    // Data tables (Rekap Bobot & Rubrik): crisp black borders
+                    table.setAttribute('border', '1');
+                    table.setAttribute('cellpadding', '5');
+                    table.setAttribute('cellspacing', '0');
+                    table.setAttribute('style', 'width:100%; border-collapse:collapse; margin-bottom:12px; border:1px solid #000000; font-family:"Times New Roman", serif; font-size:11pt; line-height:1.5;');
+                    
+                    table.querySelectorAll('th').forEach(th => {
+                        th.setAttribute('style', 'border:1px solid #000000; background-color:#e2e8f0; font-weight:bold; padding:4px 6px; text-align:center; line-height:1.5;');
+                    });
+                    table.querySelectorAll('td').forEach(td => {
+                        td.setAttribute('style', 'border:1px solid #000000; padding:4px 6px; line-height:1.5;');
+                    });
+                }
+            });
+
+            // 5. Add Page Break before Answer Key & Rubric Section
+            const evalSection = canvasContent.querySelector('.page-break-before');
+            if (evalSection) {
+                evalSection.insertAdjacentHTML('beforebegin', '<br clear="all" style="page-break-before:always; mso-break-type:page-break;" />');
+            }
+
+            // 6. Wrap content in full MS Word HTML XML wrapper
+            const htmlHeader = `
+                <html xmlns:o='urn:schemas-microsoft-com:office:office' 
+                      xmlns:w='urn:schemas-microsoft-com:office:word' 
+                      xmlns:v='urn:schemas-microsoft-com:vml'
+                      xmlns='http://www.w3.org/TR/REC-html40'>
+                <head>
+                    <meta charset='utf-8'>
+                    <title>Naskah Soal ${examState.jenisUjian}</title>
+                    <!--[if gte mso 9]>
+                    <xml>
+                        <w:WordDocument>
+                            <w:View>Print</w:View>
+                            <w:Zoom>100</w:Zoom>
+                            <w:DoNotOptimizeForBrowser/>
+                        </w:WordDocument>
+                    </xml>
+                    <![endif]-->
+                    <style>
+                        @page Section1 {
+                            size: 21.0cm 29.7cm; /* A4 */
+                            margin: 2.0cm 2.0cm 2.0cm 2.0cm;
+                            mso-header-margin: 35.4pt;
+                            mso-footer-margin: 35.4pt;
+                        }
+                        div.Section1 { page: Section1; }
+                        body {
+                            font-family: 'Times New Roman', serif;
+                            font-size: 12pt;
+                            line-height: 1.5;
+                            color: #000000;
+                        }
+                        h2, h3, h4 {
+                            font-family: 'Times New Roman', serif;
+                            margin: 4px 0;
+                            line-height: 1.5;
+                        }
+                        p, div, td, th, li, span {
+                            font-family: 'Times New Roman', serif;
+                            font-size: 12pt;
+                            line-height: 1.5;
+                            margin-top: 0px;
+                            margin-bottom: 4px;
+                        }
+                        .arabic-text {
+                            font-family: 'Traditional Arabic', 'Amiri', 'Times New Roman', serif !important;
+                            font-size: 14pt !important;
+                            direction: rtl;
+                            unicode-bidi: embed;
+                            line-height: 1.8 !important;
+                        }
+                        table { border-collapse: collapse; }
+                        td { vertical-align: top; }
+                    </style>
+                </head>
+                <body>
+                    <div class="Section1">
+            `;
+
+            const htmlFooter = `
+                    </div>
+                </body>
+                </html>
+            `;
+
+            const fullHTML = htmlHeader + canvasContent.innerHTML + htmlFooter;
+
+            const blob = new Blob(['\ufeff', fullHTML], {
+                type: 'application/msword;charset=utf-8'
+            });
+
+            const fileName = `Soal_${examState.jenisUjian}_Kelas${examState.tingkatKelas}_${examState.mataPelajaran.replace(/[^a-zA-Z0-9]/g, '_')}.doc`;
+
+            if (navigator.msSaveOrOpenBlob) {
+                navigator.msSaveOrOpenBlob(blob, fileName);
+            } else {
+                const link = document.createElement('a');
+                link.href = URL.createObjectURL(blob);
+                link.download = fileName;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            }
+        }
+    </script>
+</body>
+</html>
