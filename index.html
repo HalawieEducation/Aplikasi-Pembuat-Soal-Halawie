@@ -14,18 +14,15 @@
         .exam-document {
             font-family: 'Times New Roman', Times, serif !important;
             font-size: 12pt;
-            line-height: 1.15 !important;
+            line-height: 1.5;
             color: #000000;
-        }
-        .exam-document p, .exam-document div, .exam-document td, .exam-document th {
-            line-height: 1.15 !important;
         }
         .arabic-text {
             font-family: 'Amiri', 'Traditional Arabic', 'Times New Roman', serif !important;
             font-size: 14pt !important;
             direction: rtl;
             unicode-bidi: embed;
-            line-height: 1.8 !important;
+            line-height: 1.8;
         }
         @media print {
             @page {
@@ -146,8 +143,8 @@
                         <div>
                             <label class="block text-slate-600 mb-1">Sertakan Bahasa Arab</label>
                             <select id="sertakanArab" class="w-full rounded border-slate-300 border p-1.5 focus:ring-1 focus:ring-indigo-500">
-                                <option value="tidak">Tidak (Umum)</option>
-                                <option value="ya">Ya (PAI/Bahasa Arab)</option>
+                                <option value="tidak">Tidak</option>
+                                <option value="ya">Ya (Contoh / PAI)</option>
                             </select>
                         </div>
                     </div>
@@ -178,6 +175,7 @@
                         </label>
                     </div>
 
+                    <!-- File preview status indicator -->
                     <div id="fileInfoBox" class="hidden flex items-center justify-between bg-emerald-50 text-emerald-800 p-2 rounded border border-emerald-200 text-[11px]">
                         <span id="fileInfoText" class="truncate font-medium"><i class="fa-solid fa-check-circle mr-1 text-emerald-600"></i> File dimuat</span>
                         <button type="button" onclick="removeUploadedFile()" class="text-slate-400 hover:text-rose-600 ml-2 font-bold"><i class="fa-solid fa-xmark"></i></button>
@@ -238,7 +236,7 @@
                 </div>
                 
                 <div class="flex flex-wrap items-center gap-2">
-                    <!-- Export Word Button -->
+                    <!-- Export Word Button (Enhanced Formatting) -->
                     <button onclick="exportToWord()" class="px-3.5 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-md text-xs font-semibold shadow-sm transition flex items-center">
                         <i class="fa-solid fa-file-word mr-1.5 text-sm"></i> Download Word (.doc)
                     </button>
@@ -273,35 +271,35 @@
                 </div>
 
                 <!-- TABLE IDENTITAS UJIAN -->
-                <table id="tableIdentitas" class="w-full text-xs mb-5 border-collapse">
+                <table id="tableIdentitas" class="w-full text-xs mb-6 border-collapse">
                     <tr>
-                        <td class="w-24 font-bold py-0.5">Mata Pelajaran</td>
+                        <td class="w-24 font-bold py-1">Mata Pelajaran</td>
                         <td class="w-3">:</td>
-                        <td id="docMapel" class="py-0.5">IPAS</td>
-                        <td class="w-24 font-bold py-0.5">Hari / Tanggal</td>
+                        <td id="docMapel" class="py-1">IPAS</td>
+                        <td class="w-24 font-bold py-1">Hari / Tanggal</td>
                         <td class="w-3">:</td>
-                        <td id="docTanggal" class="py-0.5">Senin, 08 Desember 2025</td>
+                        <td id="docTanggal" class="py-1">Senin, 08 Desember 2025</td>
                     </tr>
                     <tr>
-                        <td class="font-bold py-0.5">Kelas / Semester</td>
+                        <td class="font-bold py-1">Kelas / Semester</td>
                         <td>:</td>
-                        <td id="docKelasSem" class="py-0.5">IV (Empat) / 1</td>
-                        <td class="font-bold py-0.5">Waktu</td>
+                        <td id="docKelasSem" class="py-1">IV (Empat) / 1</td>
+                        <td class="font-bold py-1">Waktu</td>
                         <td>:</td>
-                        <td id="docWaktu" class="py-0.5">07.30 - 09.00 WIB (90 Menit)</td>
+                        <td id="docWaktu" class="py-1">07.30 - 09.00 WIB (90 Menit)</td>
                     </tr>
                     <tr>
-                        <td class="font-bold py-0.5">Nama Siswa</td>
+                        <td class="font-bold py-1">Nama Siswa</td>
                         <td>:</td>
-                        <td class="py-0.5">........................................</td>
-                        <td class="font-bold py-0.5">No. Absen</td>
+                        <td class="py-1">........................................</td>
+                        <td class="font-bold py-1">No. Absen</td>
                         <td>:</td>
-                        <td class="py-0.5">..........</td>
+                        <td class="py-1">..........</td>
                     </tr>
                 </table>
 
                 <!-- PETUNJUK UMUM -->
-                <div class="bg-slate-50 p-2.5 rounded border border-slate-300 text-xs mb-5 font-sans no-print">
+                <div class="bg-slate-50 p-2.5 rounded border border-slate-300 text-xs mb-6 font-sans no-print">
                     <span class="font-bold block mb-1">Petunjuk Umum:</span>
                     <ol class="list-decimal list-inside space-y-0.5 text-slate-700">
                         <li>Tulislah nama dan nomor absenmu pada kolom yang tersedia.</li>
@@ -312,23 +310,23 @@
                 </div>
 
                 <!-- BAGIAN A: PILIHAN GANDA -->
-                <div class="mb-5">
-                    <h3 class="font-bold text-sm mb-1.5 uppercase border-b border-black pb-0.5">
+                <div class="mb-6">
+                    <h3 class="font-bold text-sm mb-2 uppercase border-b border-black pb-1">
                         A. Pilihan Ganda
                     </h3>
-                    <p class="text-xs italic mb-2.5">Berilah tanda silang (X) pada huruf A, B, C, atau D pada jawaban yang paling benar!</p>
+                    <p class="text-xs italic mb-3">Berilah tanda silang (X) pada huruf A, B, C, atau D pada jawaban yang paling benar!</p>
                     
-                    <div id="containerBagianA" class="space-y-3">
+                    <div id="containerBagianA" class="space-y-4">
                         <!-- Items rendered by JS -->
                     </div>
                 </div>
 
                 <!-- BAGIAN B: ISIAN SINGKAT / VARIATIF -->
-                <div class="mb-5">
-                    <h3 class="font-bold text-sm mb-1.5 uppercase border-b border-black pb-0.5">
+                <div class="mb-6">
+                    <h3 class="font-bold text-sm mb-2 uppercase border-b border-black pb-1">
                         B. Isian Singkat
                     </h3>
-                    <p class="text-xs italic mb-2.5">Isilah titik-titik di bawah ini dengan jawaban yang singkat dan tepat!</p>
+                    <p class="text-xs italic mb-3">Isilah titik-titik di bawah ini dengan jawaban yang singkat dan tepat!</p>
                     
                     <div id="containerBagianB" class="space-y-3">
                         <!-- Items rendered by JS -->
@@ -336,11 +334,11 @@
                 </div>
 
                 <!-- BAGIAN C: ESSAY / URAIAN -->
-                <div class="mb-5">
-                    <h3 class="font-bold text-sm mb-1.5 uppercase border-b border-black pb-0.5">
+                <div class="mb-6">
+                    <h3 class="font-bold text-sm mb-2 uppercase border-b border-black pb-1">
                         C. Soal Uraian / Essay
                     </h3>
-                    <p class="text-xs italic mb-2.5">Jawablah pertanyaan-pertanyaan di bawah ini secara jelas, rinci, dan benar!</p>
+                    <p class="text-xs italic mb-3">Jawablah pertanyaan-pertanyaan di bawah ini secara jelas, rinci, dan benar!</p>
                     
                     <div id="containerBagianC" class="space-y-4">
                         <!-- Items rendered by JS -->
@@ -354,7 +352,7 @@
                     </h3>
 
                     <!-- Tabel Bobot Penilaian -->
-                    <div class="mb-5">
+                    <div class="mb-6">
                         <h4 class="font-bold text-xs uppercase mb-1">1. Rekapitulasi Bobot Skor Penilaian Ujian Tertulis</h4>
                         <table class="w-full text-xs border border-black border-collapse text-center">
                             <thead class="bg-slate-200">
@@ -373,7 +371,7 @@
                     </div>
 
                     <!-- Kunci Jawaban Singkat -->
-                    <div class="mb-5">
+                    <div class="mb-6">
                         <h4 class="font-bold text-xs uppercase mb-2">2. Kunci Jawaban & Rubrik Penskoran Essay</h4>
                         <div id="containerKunciJawaban" class="text-xs space-y-2">
                             <!-- JS populated -->
@@ -381,7 +379,7 @@
                     </div>
 
                     <!-- RUBRIK PENILAIAN PRAKTIK / UNJUK KERJA -->
-                    <div id="sectionRubrikPraktik" class="mb-5">
+                    <div id="sectionRubrikPraktik" class="mb-6">
                         <h4 class="font-bold text-xs uppercase mb-2">3. Instrumen & Rubrik Penilaian Praktik / Unjuk Kerja (Dapat Disesuaikan)</h4>
                         <table class="w-full text-xs border border-black border-collapse">
                             <thead class="bg-slate-200 text-center">
@@ -872,12 +870,14 @@ Jumlah Soal yang Wajib Dibuat:
             renderExamDocument();
         }
 
-        // Helper untuk memformat penomoran opsi PG konsisten A, B, C, D
+        // Helper untuk memastikan format prefiks A., B., C., D. selalu konsisten
         function formatOptionText(text, index) {
-            const letters = ['A', 'C', 'B', 'D'];
+            const letters = ['A', 'B', 'C', 'D'];
             const letter = letters[index] || 'A';
             if (!text) return `${letter}. `;
             const cleanText = text.trim();
+            
+            // Bersihkan jika ada simbol/huruf awalan lama
             const strippedText = cleanText.replace(/^[A-Da-d][\.\)\-\s]+\s*/, '');
             return `${letter}. ${strippedText}`;
         }
@@ -896,12 +896,12 @@ Jumlah Soal yang Wajib Dibuat:
             document.getElementById('docKelasSem').innerText = `Kelas ${examState.tingkatKelas} / ${examState.semesterTA}`;
             document.getElementById('docWaktu').innerText = examState.alokasiWaktu;
 
-            // 1. Render Bagian A (Pilihan Ganda dengan Number alignment terpisah dari isi soal)
+            // 1. Render Bagian A
             const containerA = document.getElementById('containerBagianA');
             containerA.innerHTML = '';
             examState.bagianA.forEach((item, idx) => {
                 const div = document.createElement('div');
-                div.className = 'relative group border-b border-slate-100 pb-2.5';
+                div.className = 'relative group border-b border-slate-100 pb-2';
                 
                 let tagBadge = '';
                 if (item.isLiterasiNumerasi) {
@@ -909,24 +909,23 @@ Jumlah Soal yang Wajib Dibuat:
                 }
 
                 div.innerHTML = `
-                    <div class="flex items-start">
-                        <div class="w-7 shrink-0 font-bold text-xs leading-normal">${idx + 1}.</div>
-                        <div class="flex-1 text-xs font-normal leading-normal">
-                            <div>${item.soal} ${tagBadge}</div>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-1 text-xs mt-1.5 option-grid">
-                                ${item.opsi.map((opt, oIdx) => `<div>${formatOptionText(opt, oIdx)}</div>`).join('')}
-                            </div>
+                    <div class="flex justify-between items-start">
+                        <div class="text-xs font-normal">
+                            <span class="font-bold">${idx + 1}.</span> ${item.soal} ${tagBadge}
                         </div>
-                        <div class="hidden group-hover:flex space-x-1 no-print ml-2">
+                        <div class="hidden group-hover:flex space-x-1 no-print">
                             <button onclick="editQuestion('A', ${idx})" class="text-xs bg-amber-100 text-amber-800 px-1.5 py-0.5 rounded hover:bg-amber-200">Edit</button>
                             <button onclick="deleteQuestion('A', ${idx})" class="text-xs bg-rose-100 text-rose-800 px-1.5 py-0.5 rounded hover:bg-rose-200">Hapus</button>
                         </div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-1 text-xs mt-1.5 pl-4 option-grid">
+                        ${item.opsi.map((opt, oIdx) => `<div>${formatOptionText(opt, oIdx)}</div>`).join('')}
                     </div>
                 `;
                 containerA.appendChild(div);
             });
 
-            // 2. Render Bagian B (Isian Singkat)
+            // 2. Render Bagian B
             const containerB = document.getElementById('containerBagianB');
             containerB.innerHTML = '';
             examState.bagianB.forEach((item, idx) => {
@@ -934,10 +933,11 @@ Jumlah Soal yang Wajib Dibuat:
                 const div = document.createElement('div');
                 div.className = 'relative group border-b border-slate-100 pb-2';
                 div.innerHTML = `
-                    <div class="flex items-start text-xs">
-                        <div class="w-7 shrink-0 font-bold leading-normal">${noStr}.</div>
-                        <div class="flex-1 leading-normal">${item.soal}</div>
-                        <div class="hidden group-hover:flex space-x-1 no-print ml-2">
+                    <div class="flex justify-between items-start text-xs">
+                        <div>
+                            <span class="font-bold">${noStr}.</span> ${item.soal}
+                        </div>
+                        <div class="hidden group-hover:flex space-x-1 no-print">
                             <button onclick="editQuestion('B', ${idx})" class="text-xs bg-amber-100 text-amber-800 px-1.5 py-0.5 rounded hover:bg-amber-200">Edit</button>
                             <button onclick="deleteQuestion('B', ${idx})" class="text-xs bg-rose-100 text-rose-800 px-1.5 py-0.5 rounded hover:bg-rose-200">Hapus</button>
                         </div>
@@ -946,7 +946,7 @@ Jumlah Soal yang Wajib Dibuat:
                 containerB.appendChild(div);
             });
 
-            // 3. Render Bagian C (Essay / Uraian)
+            // 3. Render Bagian C
             const containerC = document.getElementById('containerBagianC');
             containerC.innerHTML = '';
             examState.bagianC.forEach((item, idx) => {
@@ -963,17 +963,16 @@ Jumlah Soal yang Wajib Dibuat:
                 }
 
                 div.innerHTML = `
-                    <div class="flex items-start text-xs">
-                        <div class="w-7 shrink-0 font-bold leading-normal">${noStr}.</div>
-                        <div class="flex-1 leading-normal">
-                            <div>${item.soal} ${tagBadge}</div>
-                            <div class="mt-3 border-b border-dashed border-slate-300 min-h-[35px]"></div>
+                    <div class="flex justify-between items-start text-xs">
+                        <div>
+                            <span class="font-bold">${noStr}.</span> ${item.soal} ${tagBadge}
                         </div>
-                        <div class="hidden group-hover:flex space-x-1 no-print ml-2">
+                        <div class="hidden group-hover:flex space-x-1 no-print">
                             <button onclick="editQuestion('C', ${idx})" class="text-xs bg-amber-100 text-amber-800 px-1.5 py-0.5 rounded hover:bg-amber-200">Edit</button>
                             <button onclick="deleteQuestion('C', ${idx})" class="text-xs bg-rose-100 text-rose-800 px-1.5 py-0.5 rounded hover:bg-rose-200">Hapus</button>
                         </div>
                     </div>
+                    <div class="mt-4 border-b border-dashed border-slate-300 min-h-[40px]"></div>
                 `;
                 containerC.appendChild(div);
             });
@@ -1208,12 +1207,88 @@ Jumlah Soal yang Wajib Dibuat:
             currentEditingItem = null;
         }
 
-        // PEMBARUAN & EKSPOR FORMAL KE MS WORD (.DOC)
+        // ENHANCED EXPORT TO MS WORD (.DOC) FUNCTION
         function exportToWord() {
-            // Build custom Word HTML document dynamically for complete alignment precision
-            let wordHTML = `
+            // 1. Clone element document canvas
+            const canvasContent = document.getElementById('documentCanvas').cloneNode(true);
+            
+            // 2. Remove all UI / action elements (no-print)
+            canvasContent.querySelectorAll('.no-print').forEach(el => el.remove());
+
+            // 3. Transform CSS Grid Options (A, B, C, D) into Word HTML Table (2 columns) without borders
+            const optionGrids = canvasContent.querySelectorAll('.option-grid');
+            optionGrids.forEach(grid => {
+                const optionNodes = Array.from(grid.children);
+                if (optionNodes.length === 4) {
+                    const opt0 = formatOptionText(optionNodes[0].innerText || optionNodes[0].textContent, 0);
+                    const opt1 = formatOptionText(optionNodes[1].innerText || optionNodes[1].textContent, 1);
+                    const opt2 = formatOptionText(optionNodes[2].innerText || optionNodes[2].textContent, 2);
+                    const opt3 = formatOptionText(optionNodes[3].innerText || optionNodes[3].textContent, 3);
+
+                    const tableOpts = document.createElement('table');
+                    tableOpts.className = 'options-table-word';
+                    tableOpts.setAttribute('border', '0');
+                    tableOpts.setAttribute('cellpadding', '0');
+                    tableOpts.setAttribute('cellspacing', '0');
+                    tableOpts.setAttribute('style', 'width:100%; margin-top:2px; margin-bottom:6px; border:none; border-collapse:collapse; font-family:"Times New Roman", serif; font-size:12pt; line-height:1.5;');
+                    tableOpts.innerHTML = `
+                        <tr>
+                            <td style="width:50%; vertical-align:top; border:none; padding:2px 0; line-height:1.5; font-family:'Times New Roman', serif; font-size:12pt;">${opt0}</td>
+                            <td style="width:50%; vertical-align:top; border:none; padding:2px 0; line-height:1.5; font-family:'Times New Roman', serif; font-size:12pt;">${opt1}</td>
+                        </tr>
+                        <tr>
+                            <td style="width:50%; vertical-align:top; border:none; padding:2px 0; line-height:1.5; font-family:'Times New Roman', serif; font-size:12pt;">${opt2}</td>
+                            <td style="width:50%; vertical-align:top; border:none; padding:2px 0; line-height:1.5; font-family:'Times New Roman', serif; font-size:12pt;">${opt3}</td>
+                        </tr>
+                    `;
+                    grid.parentNode.replaceChild(tableOpts, grid);
+                }
+            });
+
+            // 4. Handle table formatting specifically
+            const allTables = canvasContent.querySelectorAll('table');
+            allTables.forEach(table => {
+                if (table.classList.contains('options-table-word')) {
+                    // Option tables: strict no border
+                    table.setAttribute('border', '0');
+                    table.setAttribute('style', 'width:100%; border-collapse:collapse; margin-top:2px; margin-bottom:6px; font-family:"Times New Roman", serif; font-size:12pt; line-height:1.5; border:none;');
+                    table.querySelectorAll('td').forEach(td => {
+                        td.setAttribute('style', 'border:none !important; padding:2px 0; vertical-align:top; line-height:1.5;');
+                    });
+                } else if (table.id === 'tableIdentitas' || table.classList.contains('identitas-table')) {
+                    // Identity table: borderless
+                    table.setAttribute('border', '0');
+                    table.setAttribute('style', 'width:100%; border-collapse:collapse; margin-bottom:16px; font-family:"Times New Roman", serif; font-size:12pt; line-height:1.5; border:none;');
+                    table.querySelectorAll('td').forEach(td => {
+                        td.setAttribute('style', 'border:none !important; padding:2px 4px; vertical-align:top; line-height:1.5;');
+                    });
+                } else {
+                    // Data tables (Rekap Bobot & Rubrik): crisp black borders
+                    table.setAttribute('border', '1');
+                    table.setAttribute('cellpadding', '5');
+                    table.setAttribute('cellspacing', '0');
+                    table.setAttribute('style', 'width:100%; border-collapse:collapse; margin-bottom:12px; border:1px solid #000000; font-family:"Times New Roman", serif; font-size:11pt; line-height:1.5;');
+                    
+                    table.querySelectorAll('th').forEach(th => {
+                        th.setAttribute('style', 'border:1px solid #000000; background-color:#e2e8f0; font-weight:bold; padding:4px 6px; text-align:center; line-height:1.5;');
+                    });
+                    table.querySelectorAll('td').forEach(td => {
+                        td.setAttribute('style', 'border:1px solid #000000; padding:4px 6px; line-height:1.5;');
+                    });
+                }
+            });
+
+            // 5. Add Page Break before Answer Key & Rubric Section
+            const evalSection = canvasContent.querySelector('.page-break-before');
+            if (evalSection) {
+                evalSection.insertAdjacentHTML('beforebegin', '<br clear="all" style="page-break-before:always; mso-break-type:page-break;" />');
+            }
+
+            // 6. Wrap content in full MS Word HTML XML wrapper
+            const htmlHeader = `
                 <html xmlns:o='urn:schemas-microsoft-com:office:office' 
                       xmlns:w='urn:schemas-microsoft-com:office:word' 
+                      xmlns:v='urn:schemas-microsoft-com:vml'
                       xmlns='http://www.w3.org/TR/REC-html40'>
                 <head>
                     <meta charset='utf-8'>
@@ -1235,15 +1310,24 @@ Jumlah Soal yang Wajib Dibuat:
                             mso-footer-margin: 35.4pt;
                         }
                         div.Section1 { page: Section1; }
-                        body, table, p, div, td, th {
-                            font-family: 'Times New Roman', serif !important;
+                        body {
+                            font-family: 'Times New Roman', serif;
                             font-size: 12pt;
-                            line-height: 1.15 !important;
+                            line-height: 1.5;
                             color: #000000;
-                            margin: 0;
-                            padding: 0;
                         }
-                        p { margin-bottom: 3pt; }
+                        h2, h3, h4 {
+                            font-family: 'Times New Roman', serif;
+                            margin: 4px 0;
+                            line-height: 1.5;
+                        }
+                        p, div, td, th, li, span {
+                            font-family: 'Times New Roman', serif;
+                            font-size: 12pt;
+                            line-height: 1.5;
+                            margin-top: 0px;
+                            margin-bottom: 4px;
+                        }
                         .arabic-text {
                             font-family: 'Traditional Arabic', 'Amiri', 'Times New Roman', serif !important;
                             font-size: 14pt !important;
@@ -1251,304 +1335,23 @@ Jumlah Soal yang Wajib Dibuat:
                             unicode-bidi: embed;
                             line-height: 1.8 !important;
                         }
-                        table.identitas {
-                            width: 100%;
-                            border-collapse: collapse;
-                            margin-bottom: 12pt;
-                        }
-                        table.identitas td {
-                            padding: 2pt 0;
-                            vertical-align: top;
-                            line-height: 1.15 !important;
-                        }
-                        table.question-table {
-                            width: 100%;
-                            border-collapse: collapse;
-                            margin-bottom: 5pt;
-                        }
-                        table.question-table td.q-num {
-                            width: 25pt;
-                            vertical-align: top;
-                            font-weight: bold;
-                            padding-top: 1pt;
-                            line-height: 1.15 !important;
-                        }
-                        table.question-table td.q-text {
-                            vertical-align: top;
-                            padding-top: 1pt;
-                            line-height: 1.15 !important;
-                        }
-                        table.options-table {
-                            width: 100%;
-                            border-collapse: collapse;
-                            margin-top: 3pt;
-                            margin-bottom: 2pt;
-                        }
-                        table.options-table td {
-                            width: 50%;
-                            vertical-align: top;
-                            padding: 1.5pt 0;
-                            line-height: 1.15 !important;
-                        }
-                        table.data-table {
-                            width: 100%;
-                            border-collapse: collapse;
-                            margin-top: 6pt;
-                            margin-bottom: 10pt;
-                        }
-                        table.data-table th, table.data-table td {
-                            border: 1px solid #000000;
-                            padding: 4pt 6pt;
-                            line-height: 1.15 !important;
-                        }
-                        table.data-table th {
-                            background-color: #e2e8f0;
-                            font-weight: bold;
-                            text-align: center;
-                        }
+                        table { border-collapse: collapse; }
+                        td { vertical-align: top; }
                     </style>
                 </head>
                 <body>
                     <div class="Section1">
             `;
 
-            // Kop Surat
-            let jenisFull = "SUMATIF TENGAH SEMESTER (STS)";
-            if (examState.jenisUjian === "SAS") jenisFull = "SUMATIF AKHIR SEMESTER (SAS)";
-            else if (examState.jenisUjian === "SAT") jenisFull = "SUMATIF AKHIR TAHUN (SAT)";
-            else if (examState.jenisUjian === "PRAKTIK") jenisFull = "LEMBAR ASESMEN UJIAN PRAKTIK / UNJUK KERJA";
-
-            wordHTML += `
-                <div style="text-align: center; border-bottom: 3px double #000; padding-bottom: 6pt; margin-bottom: 10pt;">
-                    <p style="font-weight: bold; font-size: 14pt; text-transform: uppercase; margin-bottom: 2pt;">${examState.namaSekolah}</p>
-                    <p style="font-weight: bold; font-size: 12pt; text-transform: uppercase; margin-bottom: 2pt;">${jenisFull}</p>
-                    <p style="font-size: 11pt; font-style: italic;">Tahun Ajaran ${examState.semesterTA}</p>
-                </div>
-            `;
-
-            // Table Identitas
-            wordHTML += `
-                <table class="identitas">
-                    <tr>
-                        <td style="width: 18%; font-weight: bold;">Mata Pelajaran</td>
-                        <td style="width: 2%;">:</td>
-                        <td style="width: 30%;">${examState.mataPelajaran}</td>
-                        <td style="width: 18%; font-weight: bold;">Hari / Tanggal</td>
-                        <td style="width: 2%;">:</td>
-                        <td style="width: 30%;">Senin, 08 Desember 2025</td>
-                    </tr>
-                    <tr>
-                        <td style="font-weight: bold;">Kelas / Semester</td>
-                        <td>:</td>
-                        <td>Kelas ${examState.tingkatKelas} / ${examState.semesterTA}</td>
-                        <td style="font-weight: bold;">Waktu</td>
-                        <td>:</td>
-                        <td>${examState.alokasiWaktu}</td>
-                    </tr>
-                    <tr>
-                        <td style="font-weight: bold;">Nama Siswa</td>
-                        <td>:</td>
-                        <td>........................................</td>
-                        <td style="font-weight: bold;">No. Absen</td>
-                        <td>:</td>
-                        <td>..........</td>
-                    </tr>
-                </table>
-            `;
-
-            // Bagian A (Pilihan Ganda)
-            wordHTML += `
-                <div style="margin-top: 10pt; margin-bottom: 6pt; border-bottom: 1px solid #000; padding-bottom: 2pt;">
-                    <p style="font-weight: bold; text-transform: uppercase; font-size: 12pt;">A. PILIHAN GANDA</p>
-                </div>
-                <p style="font-style: italic; font-size: 11pt; margin-bottom: 8pt;">Berilah tanda silang (X) pada huruf A, B, C, atau D pada jawaban yang paling benar!</p>
-            `;
-
-            examState.bagianA.forEach((item, idx) => {
-                const opt0 = formatOptionText(item.opsi[0] || '', 0);
-                const opt1 = formatOptionText(item.opsi[1] || '', 1);
-                const opt2 = formatOptionText(item.opsi[2] || '', 2);
-                const opt3 = formatOptionText(item.opsi[3] || '', 3);
-
-                wordHTML += `
-                    <table class="question-table" border="0" cellpadding="0" cellspacing="0">
-                        <tr>
-                            <td class="q-num">${idx + 1}.</td>
-                            <td class="q-text">
-                                <div>${item.soal}</div>
-                                <table class="options-table" border="0" cellpadding="0" cellspacing="0">
-                                    <tr>
-                                        <td>${opt0}</td>
-                                        <td>${opt1}</td>
-                                    </tr>
-                                    <tr>
-                                        <td>${opt2}</td>
-                                        <td>${opt3}</td>
-                                    </tr>
-                                </table>
-                            </td>
-                        </tr>
-                    </table>
-                `;
-            });
-
-            // Bagian B (Isian Singkat)
-            wordHTML += `
-                <div style="margin-top: 14pt; margin-bottom: 6pt; border-bottom: 1px solid #000; padding-bottom: 2pt;">
-                    <p style="font-weight: bold; text-transform: uppercase; font-size: 12pt;">B. ISIAN SINGKAT</p>
-                </div>
-                <p style="font-style: italic; font-size: 11pt; margin-bottom: 8pt;">Isilah titik-titik di bawah ini dengan jawaban yang singkat dan tepat!</p>
-            `;
-
-            examState.bagianB.forEach((item, idx) => {
-                const noStr = examState.bagianA.length + idx + 1;
-                wordHTML += `
-                    <table class="question-table" border="0" cellpadding="0" cellspacing="0">
-                        <tr>
-                            <td class="q-num">${noStr}.</td>
-                            <td class="q-text">${item.soal}</td>
-                        </tr>
-                    </table>
-                `;
-            });
-
-            // Bagian C (Essay / Uraian)
-            wordHTML += `
-                <div style="margin-top: 14pt; margin-bottom: 6pt; border-bottom: 1px solid #000; padding-bottom: 2pt;">
-                    <p style="font-weight: bold; text-transform: uppercase; font-size: 12pt;">C. SOAL URAIAN / ESSAY</p>
-                </div>
-                <p style="font-style: italic; font-size: 11pt; margin-bottom: 8pt;">Jawablah pertanyaan-pertanyaan di bawah ini secara jelas, rinci, dan benar!</p>
-            `;
-
-            examState.bagianC.forEach((item, idx) => {
-                const noStr = examState.bagianA.length + examState.bagianB.length + idx + 1;
-                wordHTML += `
-                    <table class="question-table" border="0" cellpadding="0" cellspacing="0" style="margin-bottom: 12pt;">
-                        <tr>
-                            <td class="q-num">${noStr}.</td>
-                            <td class="q-text">
-                                <div>${item.soal}</div>
-                                <div style="margin-top: 18pt; border-bottom: 1px dashed #999;"></div>
-                            </td>
-                        </tr>
-                    </table>
-                `;
-            });
-
-            // Page Break for Answer Key & Rubrics
-            wordHTML += `<br clear="all" style="page-break-before:always; mso-break-type:page-break;" />`;
-
-            // Answer Key & Rubric Section
-            wordHTML += `
-                <div style="text-align: center; background-color: #f1f5f9; border: 1px solid #cbd5e1; padding: 4pt; font-weight: bold; font-size: 12pt; margin-bottom: 12pt;">
-                    INSTRUMEN PENILAIAN, KUNCI JAWABAN & PEDOMAN PENSKORAN
-                </div>
-            `;
-
-            // 1. Rekap Bobot
-            const countA = examState.bagianA.length;
-            const countB = examState.bagianB.length;
-            const countC = examState.bagianC.length;
-            const totalSkorA = countA * 1;
-            const totalSkorB = countB * 2;
-            const totalSkorC = countC * 4;
-            const grandTotal = totalSkorA + totalSkorB + totalSkorC;
-
-            wordHTML += `
-                <p style="font-weight: bold; font-size: 11pt; text-transform: uppercase;">1. Rekapitulasi Bobot Skor Penilaian Ujian Tertulis</p>
-                <table class="data-table">
-                    <thead>
-                        <tr>
-                            <th>Bentuk Soal</th>
-                            <th>Jumlah Soal</th>
-                            <th>Bobot Per Soal</th>
-                            <th>Skor Maksimal</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>A. Pilihan Ganda</td>
-                            <td style="text-align:center;">${countA}</td>
-                            <td style="text-align:center;">1</td>
-                            <td style="text-align:center;">${totalSkorA}</td>
-                        </tr>
-                        <tr>
-                            <td>B. Isian Singkat</td>
-                            <td style="text-align:center;">${countB}</td>
-                            <td style="text-align:center;">2</td>
-                            <td style="text-align:center;">${totalSkorB}</td>
-                        </tr>
-                        <tr>
-                            <td>C. Essay / Uraian</td>
-                            <td style="text-align:center;">${countC}</td>
-                            <td style="text-align:center;">4</td>
-                            <td style="text-align:center;">${totalSkorC}</td>
-                        </tr>
-                        <tr style="font-weight:bold; background-color:#f8fafc;">
-                            <td colspan="3" style="text-align:left;">TOTAL SKOR MAKSIMAL</td>
-                            <td style="text-align:center;">${grandTotal}</td>
-                        </tr>
-                    </tbody>
-                </table>
-                <p style="font-size: 10pt; font-style: italic; margin-bottom: 10pt;">* Rumus Nilai Akhir (N.A) = (Total Skor Perolehan / Total Skor Maksimal) x 100</p>
-            `;
-
-            // 2. Kunci Jawaban
-            wordHTML += `
-                <p style="font-weight: bold; font-size: 11pt; text-transform: uppercase; margin-top: 10pt;">2. Kunci Jawaban & Rubrik Penskoran Essay</p>
-                <p style="font-weight: bold; font-size: 11pt; margin-top: 4pt;">A. Pilihan Ganda:</p>
-                <p style="font-family: monospace; font-size: 11pt; margin-bottom: 6pt;">
-                    ${examState.bagianA.map((item, i) => `<b>${i + 1}.</b> ${item.kunci || 'A'}`).join('&nbsp;&nbsp;&nbsp;&nbsp;')}
-                </p>
-
-                <p style="font-weight: bold; font-size: 11pt;">B. Isian Singkat:</p>
-                <ol style="margin-top: 2pt; margin-bottom: 8pt; padding-left: 20pt;">
-                    ${examState.bagianB.map(item => `<li>${item.kunci || '-'}</li>`).join('')}
-                </ol>
-
-                <p style="font-weight: bold; font-size: 11pt;">C. Essay & Pedoman Penskoran:</p>
-                <ol style="margin-top: 2pt; margin-bottom: 12pt; padding-left: 20pt;">
-                    ${examState.bagianC.map((item, i) => `<li><b>Soal ${countA + countB + i + 1}:</b> ${item.kunci || '-'} <i>(Skor Maks: 4)</i></li>`).join('')}
-                </ol>
-            `;
-
-            // 3. Rubrik Praktik
-            wordHTML += `
-                <p style="font-weight: bold; font-size: 11pt; text-transform: uppercase; margin-top: 10pt;">3. Instrumen & Rubrik Penilaian Praktik / Unjuk Kerja</p>
-                <table class="data-table">
-                    <thead>
-                        <tr>
-                            <th style="width: 30pt;">No</th>
-                            <th style="width: 25%;">Aspek Penilaian</th>
-                            <th>Skor 1 (Perlu Bimbingan)</th>
-                            <th>Skor 2 (Cukup)</th>
-                            <th>Skor 3 (Baik)</th>
-                            <th>Skor 4 (Sangat Baik)</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        ${examState.rubrikPraktik.map((r, i) => `
-                            <tr>
-                                <td style="text-align:center; font-weight:bold;">${i + 1}</td>
-                                <td><b>${r.aspek}</b></td>
-                                <td style="font-size: 10.5pt;">${r.skor1}</td>
-                                <td style="font-size: 10.5pt;">${r.skor2}</td>
-                                <td style="font-size: 10.5pt;">${r.skor3}</td>
-                                <td style="font-size: 10.5pt;">${r.skor4}</td>
-                            </tr>
-                        `).join('')}
-                    </tbody>
-                </table>
-            `;
-
-            wordHTML += `
+            const htmlFooter = `
                     </div>
                 </body>
                 </html>
             `;
 
-            // Create Blob and trigger download
-            const blob = new Blob(['\ufeff', wordHTML], {
+            const fullHTML = htmlHeader + canvasContent.innerHTML + htmlFooter;
+
+            const blob = new Blob(['\ufeff', fullHTML], {
                 type: 'application/msword;charset=utf-8'
             });
 
